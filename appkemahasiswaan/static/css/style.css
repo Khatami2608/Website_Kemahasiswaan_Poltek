@@ -1,0 +1,22 @@
+body {
+  background-color: #f5f5f5;
+}
+
+.sidebar {
+  background-color: #0A2647; /* warna background */
+  color: white; /* warna teks */
+}
+
+.sidebar a {
+  color: white; /* warna teks link */
+}
+#navbar {
+	background-color: red;
+}
+
+#card {
+	border-radius: 6px;
+	background: #e0e0e0;
+	box-shadow:  20px -20px 59px #aaaaaa,
+	             -20px 20px 59px #ffffff;
+}

@@ -1,0 +1,100 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+Tambah Anggota Organisasi  - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+	<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Anggota/</span> Tambah Anggota Organisasi</h4>
+
+	<div class="card">
+		<div class="card-body">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						{% if pesan %}
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<i class='bx bxs-check-square'></i>
+							{{ pesan }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endif %}
+						{% if pesan2 %}
+						<div class="alert alert-danger alert-dismissible" role="alert">
+							<i class='bx bxs-error'></i>
+							{{ pesan2 }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endif %}
+						<form action="/tambah-anggota/" method="post" enctype="multipart/form-data"> 
+							{% csrf_token %}
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">NIM</label>
+								<div class="col-sm-10">
+									{{ form.nim }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Nama</label>
+								<div class="col-sm-10">
+									{{ form.nama }}
+								</div>
+							</div>
+							<div class="row align-items-center">
+								<div class="col-md">
+									<div class="row mb-4">
+										<label class="col-sm-4" for="basic-default-name">Prodi</label>
+										<div class="col-md-8">
+											{{ form.prodi }}
+										</div>
+									</div>
+								</div>
+								<div class="col-sm">
+									<div class="row mb-4">
+										<label class="col-sm-4" for="basic-default-name">Anggkatan</label>
+										<div class="col-md-8">
+											{{ form.angkatan }}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Jenis Kelamin</label>
+								<div class="col-sm-10">
+									{{ form.gender }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Nama Organisasi</label>
+								<div class="col-sm-10">
+									{{ form.organisasi }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Jabatan</label>
+								<div class="col-sm-10">
+									{{ form.jabatan }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Foto Diri</label>
+								<div class="col-sm-10">
+									{{ form.foto }}
+								</div>
+							</div>
+							<div class="row justify-content-end">
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-primary">Save<i class='bx bxs-save px-1'></i></button>
+									<a href="/anggota-organisasi" class="btn btn-danger">Kembali</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

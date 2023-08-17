@@ -1,0 +1,214 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+  Halaman Anggota Organisasi - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+    <!-- <div class="col-md px-5"> -->
+
+      <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Anggota/</span>Anggota Organisasi Politeknik Aceh</h4>
+          <!-- start Card -->
+          <div class="card">
+          <div class="card-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-5">
+                     <h3>
+                      Data Kegiatan : 
+                      <a href="/tambah-anggota" class="btn btn-success btn-sm justify-content-end">Tambah +</a>
+                    </h3>
+                  </div>
+                  <div class="col-sm">
+                    <!-- Membuat Form Pencarian -->
+                    <form action="" method="get" class="d-flex align-items-center g-3 mb-3">
+                      {% csrf_token %}
+                      <div class="row">
+                      <div class="col-md">
+                        <select class="form-select" aria-label="Default select example" name="organisasi">
+                          <option value="" {% if not organisasi %}selected{% endif %}>pilih organisasi</option>
+                            {% for choice in form.organisasi.field.choices %}
+                          <option value="{{ choice.0 }}" {% if organisasi == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+                            {% endfor %}
+                         </select>
+                      </div>
+                      <div class="col-sm d-flax justify-content-end input-group px-4">
+                        <input type="search" name="cari" placeholder="cari nama, nim, angkatan" class="form-control d-flax justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                          <i class="fas fa-search fa-fw"></i>
+                        </button>
+                      </div> 
+                    </div>
+                    </form>
+                    <!-- End Pencarian -->
+
+                  </div>
+                </div>
+
+                  {% for message in messages %}
+                    {% if messages %}
+                      <div class="alert alert-success alert-dismissible" role="alert">
+                          <i class='bx bxs-check-square'></i>
+                            {{ message }}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                       </div>
+                    {% endif %}
+                  {% endfor %}
+                <table id="table_id" class="display table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="table_id_info">
+                <thead class="thead-light">
+                  <tr role="row">
+                    <th>No.</th>
+                    <th>NIM</th>
+                    <th>Nama</th>
+                    <th>Organisasi</th>
+                    <th>Foto</th>
+                    <th>Jabatan</th>
+                    <th>Prodi</th>
+                    <th scope="col" style="width: 8rem;">Detail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for tb_anggota in anggota %}
+                    <tr>
+                      <td class="text-center">{{ forloop.counter }}</td>
+                      <td>{{ tb_anggota.nim }}</td>
+                      <td>{{ tb_anggota.nama }}</td>
+                      <td>{{ tb_anggota.organisasi }}</td>
+                      
+                      {% if tb_anggota.foto %}
+                          <td>
+                              <img src="{{ tb_anggota.foto.url }}" class="rounded-circle avatar pull-up"/>
+                          </td>
+                      {% else %}
+                          <td class="d-flex justify-content-center">No image available</td>
+                      {% endif %}
+                      <td>{{ tb_anggota.jabatan }}</td>
+                      <td>{{ tb_anggota.prodi }}</td>
+                      <td>
+                        <center>
+                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detail-{{ tb_anggota.nim }}">
+                            Detail
+                          </button>
+                        </center>
+                      </td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="detail-{{ tb_anggota.nim }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Detail</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="text-center">
+                                  <img src="{{ tb_anggota.foto.url }}" class="rounded-circle" width="90px" height="90px"/><br>
+                                  <h4>{{ tb_anggota.nama }}</h4>
+                                  <h6>{{ tb_anggota.nim }}</h6>
+                                  <hr>
+                                </div>
+                                <div class="row">
+                                  <div class="col">
+                                    <h5>Organisasi</h5>
+                                    <h6>{{ tb_anggota.organisasi }}</h6>
+                                    <hr>
+                                    <h5>Program Studi</h5>
+                                    <h6>{{ tb_anggota.prodi }}</h6>
+                                    <hr>
+                                  </div>
+                                  <div class="col">
+                                    <h5>Jabatan</h5>
+                                    <h6>{{ tb_anggota.jabatan }}</h6>
+                                    <hr>
+                                    <h5>Angkatan</h5>
+                                    <h6>{{ tb_anggota.angkatan }}</h6>
+                                    <hr>
+                                  </div>
+                                </div>
+                              <div class="modal-footer">
+                                <a href="{% url 'Edit_Anggota' id_anggota_Anggota_Organisasi=tb_anggota.id_anggota %}" type="button" class="btn btn-warning">Edit<i class="menu-icon tf-icons bx bxs-edit px-1"></i></a>
+                                <a href="{% url 'Hapus_Anggota' tb_anggota.id_anggota %}" type="button" class="btn btn-danger">Hapus<i class="menu-icon tf-icons bx bxs-trash px-1"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                         </div>
+                      </div>
+
+                  {% empty %}
+                      <td colspan="8" class="text-center">
+                          <div class="misc-wrapper">
+                            <h2 class="mb-2 mx-2">Data Not Found :(</h2>
+                            <p class="mb-4 mx-2">Oops! 😖 The requested Data was not found on this server.</p>
+                            <a href="/anggota-organisasi" class="btn btn-primary">Kembali</a>
+                            <div class="mt-3">
+                              <img
+                                src="/static/img/illustrations/page-misc-error-light.png"
+                                alt="page-misc-error-light"
+                                width="500"
+                                class="img-fluid"
+                                data-app-dark-img="illustrations/page-misc-error-dark.png"
+                                data-app-light-img="illustrations/page-misc-error-light.png"
+                              />
+                            </div>
+                          </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>      
+              </div>
+
+              <!-- Page Halaman -->
+              <div class="col-md d-flex justify-content-end pt-5">
+                {% if tb_anggota.has_other_pages %}
+                  <nav aria-label="Pagination">
+                    <ul class="pagination">
+
+                      {% if tb_anggota.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link" href="/organisasi?page={{ tb_anggota.previous_page_number }}">Previous</a>
+                        </li>
+                      {% else %}
+                        <li class="page-item disabled">
+                          <a class="page-link">Previous</a>
+                        </li>
+                      {% endif %}
+
+                      {% for page in tb_anggota.paginator.page_range %}
+                        {% if tb_anggota.number == page %}
+                          <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ page }}</span>
+                          </li>
+                        {% else %}
+                          <li class="page-item">
+                            <a class="page-link" href="/organisasi?page={{ page }}">{{ page }}</a>
+                          </li>
+                        {% endif %}
+                      {% endfor %}
+
+                      {% if tb_anggota.has_next %}
+                        <li class="page-item">
+                          <a class="page-link" href="/organisasi?page={{ tb_anggota.next_page_number }}">Next</a>
+                        </li>
+                      {% else %}
+                        <li class="page-item disabled">
+                          <a class="page-link">Next</a>
+                        </li>
+                      {% endif %}
+
+                    </ul>
+                  </nav>
+                {% endif %}
+              </div>
+              <!-- End Page halaman -->
+            </div>
+          </div>
+        </div>
+
+        </div>
+      <!-- End Card -->
+      </div>
+  
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+Tambah PPI - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+	<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Mahasiswa PPI /</span> Tambah Mahasiswa PPI</h4>
+
+	<div class="card">
+		<div class="card-body">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						{% if pesan %}
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<i class='bx bxs-check-square'></i>
+							{{ pesan }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endif %}
+						{% if pesan2 %}
+						<div class="alert alert-danger alert-dismissible" role="alert">
+							<i class='bx bxs-error'></i>
+							{{ pesan2 }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endif %}
+						<form action="/tambah-mahasiswa-magang/" method="post" enctype="multipart/form-data"> 
+							{% csrf_token %}
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">NIM</label>
+								<div class="col-sm-10">
+									{{ form.nim }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Nama</label>
+								<div class="col-sm-10">
+									{{ form.nama }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">prodi</label>
+								<div class="col-sm-10">
+									{{ form.prodi }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Jenis Kelamin</label>
+								<div class="col-sm-10">
+									{{ form.gender }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Angkatan & Semester</label>
+								<div class="col">
+									{{ form.angkatan }}
+								</div>
+								<div class="col">
+									<select class="form-select" aria-label="Default select example" name="semester" id="semester">
+										<option selected>Semester</option>
+										<option value="ganjil">Ganjil</option>
+										<option value="genap">Genap</option>
+									</select>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Jalur Masuk</label>
+								<div class="col-sm-10">
+									{{ form.jalur_masuk }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Perusahaan</label>
+								<div class="col-sm-10">
+									{{ form.perusahaan }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Tanggal Masuk PPI</label>
+								<div class="col-sm-10">
+									{{ form.tgl_magang }}
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-2" for="basic-default-name">Pembimbing</label>
+								<div class="col-sm-10">
+									{{ form.pembimbing }}
+								</div>
+							</div>
+							<div class="row justify-content-end">
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-primary">Save<i class='bx bxs-save px-1'></i></button>
+									<a href="#" class="btn btn-danger">Kembali</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

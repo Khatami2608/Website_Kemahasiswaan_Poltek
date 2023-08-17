@@ -1,0 +1,122 @@
+{% extends 'user_layout/base.html' %}
+
+{% block page_title %}
+Halaman Artikel - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	
+	<center>
+		<h1>Ini Halaman Artikel</h1>
+	</center>
+
+	<div class="row">
+		<div class="col-md-8">
+			{% for artikel in tb_artikel %}
+			<div class="card mb-3">
+	          <div class="row g-0">
+	            <div class="col-md-4">
+	                <img class="card-img card-img-left" src="{{ artikel.image.url }}" alt="Card image" style="max-width: 200px; max-height: 190px;"/>
+	            </div>
+	            <div class="col-sm">
+	              <div class="card-body">
+	                <h5 class="card-title"><a class="text-dark" href="{% url 'detail' slug_Artikel=artikel.slug %}"><b>{{ artikel.judul }}</b></h5>
+	                  <p class="card-text"><small class="text-muted">kategori : {{ artikel.kategori }} | {{ artikel.publikasi | date }}</small></p>
+	                  <p class="card-text">
+	                    {{ artikel.Deskripsi | truncatewords:20 }} <a href="{% url 'detail' slug_Artikel=artikel.slug %}">selengkapnya</a></p>
+	              </div>
+	            </div>
+	          </div>
+            </div>
+            {% empty %}
+                      <div class="misc-wrapper">
+                        <h2 class="mb-2 mx-2">Artikel Tidak Ditemukan :(</h2>
+                        <p class="mb-4 mx-2">Oops! 😖 Artikel Yang anda cari tidak ditemukan</p>
+                        <a href="/artikel" class="btn btn-primary">Kembali</a>
+                        <div class="mt-3">
+                          <img
+                          src="/static/img/illustrations/page-misc-error-light.png"
+                          alt="page-misc-error-light"
+                          width="500"
+                          class="img-fluid"
+                          data-app-dark-img="illustrations/page-misc-error-dark.png"
+                          data-app-light-img="illustrations/page-misc-error-light.png"
+                          />
+                        </div>
+                      </div>
+			{% endfor %}
+
+			 {% if tb_artikel.has_other_pages %}
+              <nav aria-label="Pagination">
+                <ul class="pagination">
+
+                  {% if tb_artikel.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="/artikel?page={{ tb_artikel.previous_page_number }}">Previous</a>
+                  </li>
+                  {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                  </li>
+                  {% endif %}
+
+                  {% for page in tb_artikel.paginator.page_range %}
+                  {% if tb_artikel.number == page %}
+                  <li class="page-item active" aria-current="page">
+                    <span class="page-link">{{ page }}</span>
+                  </li>
+                  {% else %}
+                  <li class="page-item">
+                    <a class="page-link" href="/artikel?page={{ page }}">{{ page }}</a>
+                  </li>
+                  {% endif %}
+                  {% endfor %}
+
+                  {% if tb_artikel.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="/artikel?page={{ tb_artikel.next_page_number }}">Next</a>
+                  </li>
+                  {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link">Next</a>
+                  </li>
+                  {% endif %}
+
+                </ul>
+              </nav>
+              {% endif %}
+		</div>
+		<div class="col-sm">
+      <form action="" method="get">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col input-group">
+                    <input type="search" name="cari" placeholder="Cari nama Artikel" class="form-control">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fas fa-search fa-fw"></i>
+                    </button>
+                    </div>
+                  </div><br>
+                  <div class="input-group">
+                      <input type="date" name="tanggal" class="form-control">
+                      <button type="submit" class="btn btn-primary">
+                      <i class='bx bx-calendar'></i>
+                    </button>
+                  </div>
+                </form><br>
+			<div class="card" style="background-color: #4000ff;">
+              <h5 class="card-header text-light"><b>Kategori Lainnya</b></h5>
+              <div class="card-body">
+                    <a href="/artikel" class="text-white"><b>Semua Kategori</b><hr>
+                {% for kategorilain in kategori %}
+                    {% if kategorilain.kategori != kategori_Artikel %}
+                        <a href="/kategori/{{ kategorilain.kategori }}" class="text-white">{{ kategorilain.kategori }}</a><hr>
+                    {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}

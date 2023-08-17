@@ -1,0 +1,240 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+  Halaman Data Beasiswa - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+    <!-- <div class="col-md px-5"> -->
+
+      <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Data Beasiswa /</span> Tabel Data Beasiswa</h4>
+          <!-- start Card -->
+          <div class="card">
+          <div class="card-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-8">
+                     <h3>
+                      Data Kegiatan : 
+                      <a href="/Tambah-Data-Beasiswa" class="btn btn-success btn-sm justify-content-end">Tambah +</a>
+                    </h3>
+                  </div>
+                  <div class="col-sm">
+                    <!-- Membuat Form Pencarian -->
+                    <form action="" method="get" class="d-flex align-items-center g-3 mb-3">
+                      {% csrf_token %}
+                      <div class="col-sm input-group ">
+                        <input type="search" name="carinama" placeholder="Cari Nama Beasiswa" class="form-control">
+                        <button type="submit" class="btn btn-primary">
+                          <i class="fas fa-search fa-fw"></i>
+                        </button>
+                      </div>
+                    </form>
+                    <!-- End Pencarian -->
+
+                  </div>
+                </div>
+
+                  {% for message in messages %}
+                    {% if messages %}
+                      <div class="alert alert-success alert-dismissible" role="alert">
+                          <i class='bx bxs-check-square'></i>
+                            {{ message }}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                       </div>
+                    {% endif %}
+                  {% endfor %}
+                <div class="text-nowrap">
+                <table class="table table-bordered">
+                  <thead class="text-center table-primary">
+                    <tr>
+                    <th>Nama</th>
+                    <th>Dibuka</th>
+                    <th>Ditutup</th>
+                    <th>Logo Beasiswa</th>
+                    <th scope="col" style="width: 8rem;">Action</th>
+                    <th>Detail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for DataBeasiswa in data_beasiswa %}
+                    <tr>
+                      <td>{{ DataBeasiswa.nama }}</td>
+                      <td class="text-center">{{ DataBeasiswa.dibuka | date }}</td>
+                      <td class="text-center">{{ DataBeasiswa.ditutup | date }}</td>
+                      {% if DataBeasiswa.image %}
+                        <td class="d-flex justify-content-center"><img src="{{ DataBeasiswa.image.url }}" width="40px" height="40px"/></td>
+                      {% else %}
+                        <td class="d-flex justify-content-center">No image available</td>
+                      {% endif %}             
+                      <td>
+                        <center>
+                          <a href="{% url 'Ubah_DataBeasiswa' DataBeasiswa.id %}"><i class="menu-icon tf-icons bx bxs-edit" style="color: #ffcc00;"></i></a> 
+                          <i type ="button" class="menu-icon tf-icons bx bxs-trash" data-bs-toggle="modal" data-bs-target="#hapus-{{ DataBeasiswa.id }}" style="color: #b30000;"></i>
+                        </center>
+                      </td>
+                      <div class="modal" tabindex="-1" id="hapus-{{ DataBeasiswa.id }}">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Hapus</h5>
+                            </div>
+                            <div class="modal-body">
+                              apakah anda yakin ingin menghapus <strong>{{ DataBeasiswa.nama | upper }}</strong>
+                            </div>
+                            <div class="modal-footer">
+                              <a href="{% url 'Hapus_DataBeasiswa' DataBeasiswa.id %}" class="btn btn-danger">Hapus</a>
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Batal</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <td>
+                        <center>
+                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detail-{{ DataBeasiswa.id }}">
+                            Detail
+                          </button>
+                        </center>
+                      </td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="detail-{{ DataBeasiswa.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Detail {{ DataBeasiswa.nama }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="col">
+                                    <h5>Logo {{ DataBeasiswa.nama }}</h5>
+                                    <img src="{{ DataBeasiswa.image.url }}" width="80px" height="80px"/>
+                                    <hr>
+                                    <h5>Deskripsi</h5>
+                                    <p>{{ DataBeasiswa.deskripsi|slice:": -1"  }}.</p>
+                                    <hr>
+                                    <h5>Persyaratan</h5>
+                                    <p>{{ DataBeasiswa.persyaratan }}.</p>
+                                    <hr>
+                                    <h5>Benefit</h5>
+                                    <p>{{ DataBeasiswa.benefit }}.</p>
+                                    <hr>
+                                    <h5>Status</h5>
+                                    <p>{{ DataBeasiswa.status }}.</p>
+                                    <hr>
+                                    <div class="row">
+                                      <div class="col">
+                                        <h5>dibuka</h5>
+                                        <p>{{ DataBeasiswa.dibuka }}.</p>
+                                        <hr>
+                                      </div>
+                                      <div class="col">
+                                        <h5>ditutup</h5>
+                                        <p>{{ DataBeasiswa.ditutup }}.</p>
+                                        <hr>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col">
+                                        <h5>IP Minimal</h5>
+                                        <p>{{ DataBeasiswa.ip_minimal }}.</p>
+                                        <hr>
+                                      </div>
+                                      <div class="col">
+                                        <h5>IPK Minimal</h5>
+                                        <p>{{ DataBeasiswa.ipk_minimal }}.</p>
+                                        <hr>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              <div class="modal-footer">
+                                <a href="{% url 'Ubah_DataBeasiswa' DataBeasiswa.id %}" type="button" class="btn btn-warning">Edit<i class="menu-icon tf-icons bx bxs-edit px-1"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </tr>
+
+                  {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center">
+                          <div class="misc-wrapper">
+                            <h2 class="mb-2 mx-2">Data Not Found :(</h2>
+                            <p class="mb-4 mx-2">Oops! 😖 The requested Data was not found on this server.</p>
+                            <a href="/Data-Beasiswa" class="btn btn-primary">Kembali</a>
+                            <div class="mt-3">
+                              <img
+                                src="/static/img/illustrations/page-misc-error-light.png"
+                                alt="page-misc-error-light"
+                                width="500"
+                                class="img-fluid"
+                                data-app-dark-img="illustrations/page-misc-error-dark.png"
+                                data-app-light-img="illustrations/page-misc-error-light.png"
+                              />
+                            </div>
+                          </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>      
+                </div>
+              </div>
+
+              <!-- Page Halaman -->
+              <div class="col-md d-flex justify-content-end pt-5">
+                {% if data_beasiswa.has_other_pages %}
+                  <nav aria-label="Pagination">
+                    <ul class="pagination">
+
+                      {% if data_beasiswa.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link" href="/Data-Beasiswa?page={{ data_beasiswa.previous_page_number }}">Previous</a>
+                        </li>
+                      {% else %}
+                        <li class="page-item disabled">
+                          <a class="page-link">Previous</a>
+                        </li>
+                      {% endif %}
+
+                      {% for page in data_beasiswa.paginator.page_range %}
+                        {% if data_beasiswa.number == page %}
+                          <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ page }}</span>
+                          </li>
+                        {% else %}
+                          <li class="page-item">
+                            <a class="page-link" href="/Data-Beasiswa?page={{ page }}">{{ page }}</a>
+                          </li>
+                        {% endif %}
+                      {% endfor %}
+
+                      {% if data_beasiswa.has_next %}
+                        <li class="page-item">
+                          <a class="page-link" href="/Data-Beasiswa?page={{ data_beasiswa.next_page_number }}">Next</a>
+                        </li>
+                      {% else %}
+                        <li class="page-item disabled">
+                          <a class="page-link">Next</a>
+                        </li>
+                      {% endif %}
+
+                    </ul>
+                  </nav>
+                {% endif %}
+              </div>
+              <!-- End Page halaman -->
+            </div>
+          </div>
+        </div>
+
+        </div>
+      <!-- End Card -->
+      </div>
+  
+{% endblock %}

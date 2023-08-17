@@ -1,0 +1,94 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+  Tambah Organisasi  - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+
+    	<div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Organisasi /</span> Tambah Organisasi</h4>
+
+		<div class="card">
+		    <div class="card-body">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							{% if pesan %}
+									<div class="alert alert-success alert-dismissible" role="alert">
+										<i class='bx bxs-check-square'></i>
+				                        {{ pesan }}
+				                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				                     </div>
+								{% endif %}
+								{% if pesan2 %}
+									<div class="alert alert-danger alert-dismissible" role="alert">
+										<i class='bx bxs-error'></i>
+				                        {{ pesan2 }}
+				                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				                     </div>
+								{% endif %}
+							<form action="/tambah-organisasi/" method="post" enctype="multipart/form-data"> 
+								{% csrf_token %}
+									<div class="row mb-3">
+								    <label class="col-sm-2" for="basic-default-name">Organisasi</label>
+								        <div class="col-sm-10">
+								            {{ form.organisasi }}
+								        </div>
+							    	</div>
+							    	<div class="row mb-3">
+								    <label class="col-sm-2" for="basic-default-name">Visi Organisasi</label>
+								        <div class="col-sm-10">
+								            {{ form.visi }}
+								        </div>
+							    	</div>
+							    	<div class="row mb-3">
+								    <label class="col-sm-2" for="basic-default-name">Misi Organisasi</label>
+								        <div class="col-sm-10">
+								            {{ form.misi }}
+								        </div>
+							    	</div>
+							    	<div class="row mb-3">
+							        <label class="col-sm-2" for="basic-default-name">Upload Logo</label>
+							        <div class="col-sm-10">
+							        	<input type="file" name="logo" class="form-control" id="upload-logo" accept="logo/*" onchange="previewImage(event)"/>
+							        </div>
+							    	</div>	    
+						            <div class="row mb-3">
+						              <label class="col-sm-2 col-form-label" for="basic-default-name">Image Preview</label>
+						              <div class="col-sm-10">
+						                <img id="image-preview" style="max-width: 300px; max-height: 200px;" />
+						              </div>
+						            </div>
+							    	<div class="row mb-3">
+							        <label class="col-sm-2" for="basic-default-name">Status Organisasi</label>
+							        <div class="col-sm-10">
+							            {{ form.status }}
+							        </div>
+							    	</div>
+								<div class="row justify-content-end">
+			                        <div class="col-sm-10">
+									    <button type="submit" class="btn btn-primary">Save<i class='bx bxs-save px-1'></i></button>
+									    <a href="/organisasi" class="btn btn-danger">Kembali</a>
+									</div>
+		                     	</div>
+							</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+  function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var imagePreview = document.getElementById('image-preview');
+      imagePreview.src = reader.result;
+    }
+    var selectedFile = event.target.files[0];
+    reader.readAsDataURL(selectedFile);
+  }
+</script>
+{% endblock %}

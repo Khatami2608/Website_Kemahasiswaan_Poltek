@@ -1,0 +1,198 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+  Halaman Organisasi - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+    <!-- <div class="col-md px-5"> -->
+
+      <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Organisasi /</span> Organisasi Politeknik Aceh</h4>
+          <!-- start Card -->
+          <div class="card">
+          <div class="card-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                     <h3>
+                      Data Kegiatan : 
+                      <a href="/tambah-organisasi" class="btn btn-success btn-sm justify-content-end">Tambah +</a>
+                    </h3>
+                  </div>
+                  <div class="col-sm">
+                    <!-- Membuat Form Pencarian -->
+                    <form action="" method="get" class="d-flex align-items-center g-3 mb-3">
+                      {% csrf_token %}
+                      <div class="col-sm input-group px-4">
+                        <input type="search" name="cari" placeholder="cari organisasi" class="form-control">
+                        <button type="submit" class="btn btn-primary">
+                          <i class="fas fa-search fa-fw"></i>
+                        </button>
+                      </div>
+                    </form>
+                    <!-- End Pencarian -->
+
+                  </div>
+                </div>
+
+                  {% for message in messages %}
+                    {% if messages %}
+                      <div class="alert alert-success alert-dismissible" role="alert">
+                          <i class='bx bxs-check-square'></i>
+                            {{ message }}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                       </div>
+                    {% endif %}
+                  {% endfor %}
+                <table id="table_id" class="display table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="table_id_info">
+                <thead class="thead-light">
+                  <tr role="row">
+                    <th>No.</th>
+                    <th>Organisasi</th>
+                    <th>visi</th>
+                    <th>misi</th>
+                    <th>Image</th>
+                    <th>Status</th>
+                    <th scope="col" style="width: 8rem;">Detail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for tb_organisasi in organisasi %}
+                    <tr>
+                      <td class="text-center">{{ forloop.counter }}</td>
+                      <td>{{ tb_organisasi.organisasi }}</td>
+                      <td>{{ tb_organisasi.visi | truncatewords:30 }}</td>
+                      <td>{{ tb_organisasi.misi | truncatewords:30 }}</td>
+                      {% if tb_organisasi.logo %}
+                          <td class="d-flex justify-content-center"><img src="{{ tb_organisasi.logo.url }}" width="40px" height="40px"/></td>
+                      {% else %}
+                          <td class="d-flex justify-content-center">No image available</td>
+                      {% endif %}
+                      <td>{{ tb_organisasi.status }}</td>
+                      <td>
+                        <center>
+                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detail-{{ tb_organisasi.id }}">
+                            Detail
+                          </button>
+                        </center>
+                      </td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="detail-{{ tb_organisasi.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Detail {{ tb_organisasi.organisasi }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="col">
+                                    <h5>Logo {{ tb_organisasi.organisasi }}</h5>
+                                    <img src="{{ tb_organisasi.logo.url }}" width="80px" height="80px"/>
+                                    <hr>
+                                    <h5>Visi</h5>
+                                    <p>{{ tb_organisasi.visi }}.</p>
+                                    <hr>
+                                    <h5>Misi</h5>
+                                    <p>{{ tb_organisasi.visi }}.</p>
+                                    <hr>
+                                  </div>
+                                </div>
+                              <div class="modal-footer">
+                                <a href="{% url 'Edit_Organisasi' id_organisasi_Organisasi=tb_organisasi.id_organisasi %}" type="button" class="btn btn-warning">Edit<i class="menu-icon tf-icons bx bxs-edit px-1"></i></a>
+                                <a href="{% url 'Hapus_Organisasi' tb_organisasi.id_organisasi %}" type="button" class="btn btn-danger">Hapus<i class="menu-icon tf-icons bx bxs-trash px-1"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                         </div>
+                    	</div>
+                    </tr>
+
+                  {% empty %}
+                    <tr>
+                      <td colspan="7" class="text-center">
+                          <div class="misc-wrapper">
+                            <h2 class="mb-2 mx-2">Data Not Found :(</h2>
+                            <p class="mb-4 mx-2">Oops! 😖 The requested Data was not found on this server.</p>
+                            <a href="/organisasi" class="btn btn-primary">Kembali</a>
+                            <div class="mt-3">
+                              <img
+                                src="/static/img/illustrations/page-misc-error-light.png"
+                                alt="page-misc-error-light"
+                                width="500"
+                                class="img-fluid"
+                                data-app-dark-img="illustrations/page-misc-error-dark.png"
+                                data-app-light-img="illustrations/page-misc-error-light.png"
+                              />
+                            </div>
+                          </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>      
+              </div>
+
+              <!-- Page Halaman -->
+              <div class="row">
+                <div class="col-md pt-5">
+                  <p class="me-3">
+                    Page {{ organisasi.number }} of {{ organisasi.paginator.num_pages }},
+                    Showing {{ organisasi.start_index }} to {{ organisasi.end_index }} of {{ organisasi.paginator.count }} entries
+                </p>
+                </div>
+                <div class="col-sm d-flex justify-content-end pt-5">
+                  {% if organisasi.has_other_pages %}
+                  <nav aria-label="Pagination">
+                      <ul class="pagination">
+
+                          {% if organisasi.has_previous %}
+                              <li class="page-item">
+                                  <a class="page-link" href="/organisasi?page={{ organisasi.previous_page_number }}">Previous</a>
+                              </li>
+                          {% else %}
+                              <li class="page-item disabled">
+                                  <a class="page-link">Previous</a>
+                              </li>
+                          {% endif %}
+
+                          {% for page in organisasi.paginator.page_range %}
+                              {% if organisasi.number == page %}
+                                  <li class="page-item active" aria-current="page">
+                                      <span class="page-link">{{ page }}</span>
+                                  </li>
+                              {% else %}
+                                  <li class="page-item">
+                                      <a class="page-link" href="/organisasi?page={{ page }}">{{ page }}</a>
+                                  </li>
+                              {% endif %}
+                          {% endfor %}
+
+                          {% if organisasi.has_next %}
+                              <li class="page-item">
+                                  <a class="page-link" href="/organisasi?page={{ organisasi.next_page_number }}">Next</a>
+                              </li>
+                          {% else %}
+                              <li class="page-item disabled">
+                                  <a class="page-link">Next</a>
+                              </li>
+                          {% endif %}
+
+                      </ul>
+                  </nav>
+              {% endif %}
+                </div>
+              </div>
+          <!-- End Page halaman -->
+          </div>
+          </div>
+        </div>
+
+        </div>
+      <!-- End Card -->
+      </div>
+  
+{% endblock %}
