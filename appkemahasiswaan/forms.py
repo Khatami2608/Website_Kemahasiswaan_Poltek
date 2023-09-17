@@ -1,8 +1,11 @@
 from django.forms import ModelForm, forms
 from django import forms
 from appkemahasiswaan.models import *
+from ckeditor.widgets import CKEditorWidget
 
 class FormArtikel(ModelForm):
+    Deskripsi = forms.CharField(widget=CKEditorWidget())
+    
     class Meta:
         model = Artikel
         fields = '__all__'
@@ -10,9 +13,20 @@ class FormArtikel(ModelForm):
         widgets = {
             'judul': forms.TextInput({'class': 'form-control'}),
             'publikasi': forms.DateInput({'class': 'form-control', 'type': 'date'}),
-            'Deskripsi': forms.Textarea({'class': 'form-control', 'placeholder': 'Tuliskan deskripsi artikel'}),
-            'kategori': forms.TextInput({'class': 'form-control', 'placeholder': 'Maksukkan Kategori'}),
+            'kategori': forms.Select({'class': 'form-control'}),
             'image': forms.ClearableFileInput({'class': 'form-control', 'id': 'upload-image', 'accept': 'image/*', 'onchange': 'previewImage(event)'}),
+            'status': forms.Select({'class': 'form-control'}),
+        }
+
+
+class CategoryForm(ModelForm):
+    
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+        widgets = {
+            'kategori': forms.TextInput({'class': 'form-control', 'placeholder': 'Buat kategori Baru'}),
         }
 
 class FormPrestasi(ModelForm):
@@ -59,8 +73,8 @@ class FormDataBeasiswa(ModelForm):
             'benefit': forms.Textarea({'class': 'form-control', 'placeholder': 'Masukkan Benefit Yang Diterima'}),
             'deskripsi': forms.Textarea({'class': 'form-control', 'placeholder': 'Masukkan Deskripsi Beasiswa'}),
             'persyaratan': forms.Textarea({'class': 'form-control', 'placeholder': 'Masukkan Persyaratan Beasiswa'}),
-            'ip_minimal': forms.NumberInput({'class': 'form-control', 'placeholder': 'IP Minimal '}),
-            'ipk_minimal': forms.NumberInput({'class': 'form-control', 'placeholder': 'IPK Minimal '}),
+            'ip_minimal': forms.TextInput({'class': 'form-control', 'placeholder': 'IP Minimal '}),
+            'ipk_minimal': forms.TextInput({'class': 'form-control', 'placeholder': 'IPK Minimal '}),
             'status': forms.TextInput({'class': 'form-control', 'placeholder': 'Masukkan Status Beasiswa'}),
             'image': forms.ClearableFileInput({'class': 'form-control'}),
         }
@@ -75,9 +89,20 @@ class FormPenerima_Beasiswa(ModelForm):
             'nama': forms.TextInput({'class': 'form-control', 'placeholder': 'Masukkan Nama Mahasiswa'}),
             'angkatan': forms.NumberInput({'class': 'form-control', 'placeholder': 'Masukkan Angkatan'}),
             'prodi': forms.Select({'class': 'form-control'}),
-            'beasiswa': forms.TextInput({'class': 'form-control', 'placeholder': 'Masukkan Nama Beasiswa'}),
             'status': forms.TextInput({'class': 'form-control', 'placeholder': 'Masukkan Status Mahasiswa'}),
             'gender': forms.Select({'class': 'form-control'}),
+            'foto': forms.ClearableFileInput({'class': 'form-control', 'onchange': 'previewImage(event)'}),
+        }
+
+class FormBeasiswa(ModelForm):
+    class Meta:
+        model = Beasiswa
+        fields = '__all__'
+
+        widgets = {
+            'beasiswa': forms.TextInput({'class': 'form-control', 'placeholder': 'Masukkan Nama Beasiswa'}),
+            'smstr_awal': forms.TextInput({'class': 'form-control', 'placeholder': 'dari semester ke-'}),
+            'smstr_akhir': forms.TextInput({'class': 'form-control', 'placeholder': 'sampai semester ke-'}),
         }
 
 class FormMahasiswa_Magang(ModelForm):

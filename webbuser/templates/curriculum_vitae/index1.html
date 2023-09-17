@@ -1,0 +1,369 @@
+{% extends 'user_layout/base.html' %}
+
+{% block page_title %}
+Halaman Buat CV - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+<!-- tambah_data.html -->
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Create VC /</span> Buat CV</h4>
+  <div class="card">
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        <small class="text-light fw-semibold">Vertical</small>
+        <div class="mt-3">
+          <div class="row">
+            <div class="col-md-2 col-12 mb-3 mb-md-0">
+              <div class="list-group list-group-flush">
+                <a
+                class="list-group-item list-group-item-action active"
+                id="list-home-list"
+                data-bs-toggle="list"
+                href="#list-home"
+                >Home</a
+                >
+                <a
+                class="list-group-item list-group-item-action"
+                id="list-profile-list"
+                data-bs-toggle="list"
+                href="#list-profile"
+                >Profile</a
+                >
+                <a
+                class="list-group-item list-group-item-action"
+                id="list-messages-list"
+                data-bs-toggle="list"
+                href="#list-messages"
+                >Messages</a
+                >
+                <a
+                class="list-group-item list-group-item-action"
+                id="list-settings-list"
+                data-bs-toggle="list"
+                href="#list-settings"
+                >Settings</a
+                >
+              </div>
+            </div>
+            <div class="col-md col-12">
+              <div class="tab-content p-0">
+                <div class="tab-pane fade show active" id="list-home">
+                  <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h5 class="fw-bold py-3 mb-2">Data Pribadi<hr></h5>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Nama Lengkap</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.first_name }}
+                      </div>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.last_name }}
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Jenis Kelamin</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.gender }}
+                      </div>    
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Tanggal Lahir</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.tgl_lahir }}
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Status</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.status }}
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Agama</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.agama }}
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Warga Negara</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.warga_negara }}
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Alamat Sekarang</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.alamat }}
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">No.Telpon</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.nomer_hp }}
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Email</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.email }}
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Deskripsi Diri</label>
+                      <div class="col-sm mb-3">
+                        {{ personal_info_form.deskripsi }}
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label" for="basic-default-name">Upload Foto</label>
+                      <div class="col-sm">
+                        <input type="file" name="photo" class="form-control" id="upload-image" accept="image/*" onchange="previewImage(event)"/>
+                        <p class="text-danger">Upload foto ukuran 3x4</p>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label" for="basic-default-name">Foto Preview</label>
+                      <div class="col-sm">
+                        <img id="image-preview" style="max-width: 354px; max-height: 472px;" />
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crate CV<i class='bx bxs-save px-1'></i></button>
+                  </form>
+                </div>
+                <div class="tab-pane fade" id="list-profile">
+                  <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div>
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="fw-bold py-3 mb-2">Skill / Kemampuan</h5>
+                        </div>
+                        <div class="col justify-content-end">
+                          <button type="button" class="btn btn-primary" onclick="addFormPendidikan()">Tambah Pendidikan</button>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                    <div id="form-container1">
+                      <div class="row mb-3">
+                        <label class="col-sm-2 mb-3 col-form-label">Pendidikan</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="nama_pendidikan" class="form-control" placeholder="Sekolah / Institusi / Universitas"/>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-sm-2 mb-3 col-form-label">periode</label>
+                        <div class="col-sm-2 mb-3">
+                          <input type="number" name="masuk" class="form-control" placeholder="masuk"/>
+                        </div>
+                        <div class="col-sm-2 mb-3">
+                          <input type="number" name="keluar" class="form-control" placeholder="keluar"/>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 mb-3 col-form-label">Jenjang Pendidikan</label>
+                        <div class="col-sm-4 mb-3">
+                          <input type="text" name="jenjang" class="form-control" placeholder="jenjang pendidikan"/>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crate CV<i class='bx bxs-save px-1'></i></button>
+                  </form>
+                </div>
+                <div class="tab-pane fade" id="list-messages">
+                  <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div>
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="fw-bold py-3 mb-2">Skill / Kemampuan</h5>
+                        </div>
+                        <div class="col justify-content-end">
+                          <button type="button" class="btn btn-primary" onclick="addFormSkill()">Tambah Skill</button>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                    <div id="form-container2">
+                      <div class="row">
+                        <div class="col">
+                          <div class="row mb-3">
+                            <label class="col-sm-2 mb-3 col-form-label">Bidang Skill</label>
+                            <div class="col-sm">
+                              <input type="text" name="bidang" class="form-control" placeholder="bidang dikuasai"/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="row mb-3">
+                            <label class="col-sm-3 mb-3 col-form-label">Perangkat</label>
+                            <div class="col-sm mb-3">
+                              <input type="text" name="keterangan" class="form-control" placeholder="keahlian yang dimiliki"/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crate CV<i class='bx bxs-save px-1'></i></button>
+                  </form>
+                </div>
+                <div class="tab-pane fade" id="list-settings">
+                  <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div>
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="fw-bold py-3 mb-2">Training / Pelatihan</h5>
+                        </div>
+                        <div class="col justify-content-end">
+                          <button type="button" class="btn btn-primary" onclick="addFormTraining()">Tambah Training</button>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                    <div id="form-container3">
+                      <div class="row">
+                        <div class="col-sm mb-3">
+                          <label class="col-sm mb-3 col-form-label">Training</label>
+                          <input type="text" name="training" class="form-control mb-3" placeholder="nama training"/>
+                        </div>
+                        <div class="col-sm mb-3">
+                          <label class="col-sm mb-3 col-form-label">Tahun</label>
+                          <input type="number" name="tahun" class="form-control mb-3" placeholder="Tahun Training"/>
+                        </div>
+                        <div class="col-sm mb-3">
+                          <label class="col-sm mb-3 col-form-label">Penyelenggara</label>
+                          <input type="text" name="penyelenggara" class="form-control mb-3" placeholder="penyelenggara training"/>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crate CV<i class='bx bxs-save px-1'></i></button>
+                  </form>
+                  <hr>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var imagePreview = document.getElementById('image-preview');
+      imagePreview.src = reader.result;
+    }
+    var selectedFile = event.target.files[0];
+    reader.readAsDataURL(selectedFile);
+  }
+
+  function addFormPendidikan() {
+    var formContainer = document.getElementById("form-container1");
+    var formTemplate = document.getElementById("form-pendidikan").innerHTML;
+    var clone = document.createElement('div');
+    clone.innerHTML = formTemplate;
+    formContainer.appendChild(clone);
+  }
+
+
+  function addFormSkill() {
+    var formContainer = document.getElementById("form-container2");
+    var formTemplate = document.getElementById("form-skill").innerHTML;
+    var clone = document.createElement('div');
+    clone.innerHTML = formTemplate;
+    formContainer.appendChild(clone);
+  }
+
+  function addFormTraining() {
+    var formContainer = document.getElementById("form-container3");
+    var formTemplate = document.getElementById("form-traininng").innerHTML;
+    var clone = document.createElement('div');
+    clone.innerHTML = formTemplate;
+    formContainer.appendChild(clone);
+  }
+
+  function removeForm(form) {
+    form.parentNode.removeChild(form);
+  }
+</script>
+<script id="form-pendidikan" type="text/template">
+  <div class="row mb-3">
+    <label class="col-sm-2 mb-3 col-form-label">Pendidikan</label>
+    <div class="col-sm-4 mb-3">
+      <input type="text" name="nama_pendidikan" class="form-control" placeholder="Sekolah / Institusi / Universitas"/>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label class="col-sm-2 mb-3 col-form-label">periode</label>
+    <div class="col-sm-2 mb-3">
+      <input type="number" name="masuk" class="form-control" placeholder="masuk"/>
+    </div>
+    <div class="col-sm-2 mb-3">
+      <input type="number" name="keluar" class="form-control" placeholder="keluar"/>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label class="col-sm-2 mb-3 col-form-label">Jenjang Pendidikan</label>
+    <div class="col-sm-4 mb-3">
+      <input type="text" name="jenjang" class="form-control" placeholder="jenjang pendidikan"/>
+    </div>
+  </div>
+  <button type="button" class="btn btn-danger" onclick="removeForm(this.parentNode)">Hapus</button>
+  <hr>
+</script>
+
+<script id="form-skill" type="text/template">
+  <div class="row">
+    <div class="col">
+      <div class="row mb-3">
+        <label class="col-sm-2 mb-3 col-form-label">Bidang Skill</label>
+        <div class="col-sm">
+          <input type="text" name="bidang" class="form-control" placeholder="bidang dikuasai"/>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row mb-3">
+        <label class="col-sm-2 mb-3 col-form-label">Perangkat</label>
+        <div class="col-sm mb-3">
+          <input type="text" name="keterangan" class="form-control" placeholder="keahlian yang dimiliki"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-danger" onclick="removeForm(this.parentNode)">Hapus</button>
+</script>
+
+<script id="form-traininng" type="text/template">
+  <div class="row">
+    <div class="col-sm mb-3">
+      <label class="col-sm mb-3 col-form-label">Training</label>
+      <input type="text" name="training" class="form-control mb-3" placeholder="nama training"/>
+    </div>
+    <div class="col-sm mb-3">
+      <label class="col-sm mb-3 col-form-label">Tahun</label>
+      <input type="number" name="tahun" class="form-control mb-3" placeholder="Tahun Training"/>
+    </div>
+    <div class="col-sm mb-3">
+      <label class="col-sm mb-3 col-form-label">Penyelenggara</label>
+      <input type="text" name="penyelenggara" class="form-control mb-3" placeholder="penyelenggara training"/>
+    </div>
+  </div>
+  <button type="button" class="btn btn-danger" onclick="removeForm(this.parentNode)">Hapus</button>
+</script>
+
+{% endblock %}
+
+
+
+
+

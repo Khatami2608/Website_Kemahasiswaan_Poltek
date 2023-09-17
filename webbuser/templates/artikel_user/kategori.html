@@ -5,39 +5,82 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    
-    <center>
-        <h1>Ini Halaman Kategori</h1>
-    </center>
+<!-- ======= Main ======= -->
+  <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+      {% for artikel in tb_artikel %}
+        <ol>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/artikel">Aktivitas</a></li>
+          <li>{{ artikel.kategori }}</li>
+        </ol>
+        <h2>mapa informations</h2>
+      {% endfor %}
+      </div>
+    </section><!-- End Breadcrumbs -->
 
-    <div class="row">
-        <div class="col-md-8">
+        <!-- ======= Blog Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row">
+
+          <div class="col-lg-8 entries">
             {% for artikel in tb_artikel %}
-            <div class="card mb-3">
-              <div class="row g-0">
-                <div class="col-md-4">
-                    <img class="card-img card-img-left" src="{{ artikel.image.url }}" alt="Card image" style="max-width: 200px; max-height: 190px;"/>
-                </div>
-                <div class="col-sm">
-                  <div class="card-body">
-                    <h5 class="card-title"><a class="text-dark" href="{% url 'detail' slug_Artikel=artikel.slug %}"><b>{{ artikel.judul }}</b></h5>
-                      <p class="card-text"><small class="text-muted">kategori : {{ artikel.kategori }} | {{ artikel.publikasi | date }}</small></p>
-                      <p class="card-text">
-                        {{ artikel.Deskripsi | truncatewords:20 }} <a href="{% url 'detail' slug_Artikel=artikel.slug %}">selengkapnya</a></p>
-                  </div>
+            <article class="entry">
+
+              <div class="entry-img">
+                <img src="{{ artikel.image.url }}" alt="" class="img-fluid mx-auto d-block">
+              </div>
+
+
+              <div class="entry-meta">
+                <ul>
+                  <li class="d-flex align-items-center"><i class="bi bi-folder"></i> <a href="blog-single.html">{{ artikel.kategori }}</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-calendar"></i> <a href="blog-single.html"><time datetime="2020-01-01">{{ artikel.publikasi | date }}</time></a></li>
+                </ul>
+              </div>
+
+              <div class="entry-content">
+              <h2 class="entry-title">
+                <a href="{% url 'detail' slug_Artikel=artikel.slug %}">{{ artikel.judul }}</a>
+              </h2>
+                <<!-- p>
+                  {{ artikel.Deskripsi | truncatewords:20 }}
+                </p> -->
+                <div class="read-more">
+                  <a href="{% url 'detail' slug_Artikel=artikel.slug %}">Read More</a>
                 </div>
               </div>
-            </div>
+
+            </article><!-- End blog entry -->
+            {% empty %}
+                      <div class="misc-wrapper">
+                        <h2 class="mb-2 mx-2">Artikel Tidak Ditemukan :(</h2>
+                        <p class="mb-4 mx-2">Oops! 😖 Artikel Yang anda cari tidak ditemukan</p>
+                        <a href="/artikel" class="btn btn-primary">Kembali</a>
+                        <div class="mt-3">
+                          <img
+                          src="/static/img/illustrations/page-misc-error-light.png"
+                          alt="page-misc-error-light"
+                          width="500"
+                          class="img-fluid"
+                          data-app-dark-img="illustrations/page-misc-error-dark.png"
+                          data-app-light-img="illustrations/page-misc-error-light.png"
+                          />
+                        </div>
+                      </div>
             {% endfor %}
 
-             {% if tb_artikel.has_other_pages %}
-              <nav aria-label="Pagination">
-                <ul class="pagination">
+            {% if tb_artikel.has_other_pages %}
+              <div class="blog-pagination">
+                <ul class="pagination justify-content-center">
 
                   {% if tb_artikel.has_previous %}
                   <li class="page-item">
-                    <a class="page-link" href="/artikel?page={{ tb_artikel.previous_page_number }}">Previous</a>
+                    <a class="page-link" href="/kategori/<slug:kategori_Artikel>/?page={{ tb_artikel.previous_page_number }}">Previous</a>
                   </li>
                   {% else %}
                   <li class="page-item disabled">
@@ -52,14 +95,14 @@
                   </li>
                   {% else %}
                   <li class="page-item">
-                    <a class="page-link" href="/artikel?page={{ page }}">{{ page }}</a>
+                    <a class="page-link" href="/kategori/<slug:kategori_Artikel>/?page={{ page }}">{{ page }}</a>
                   </li>
                   {% endif %}
                   {% endfor %}
 
                   {% if tb_artikel.has_next %}
                   <li class="page-item">
-                    <a class="page-link" href="/artikel?page={{ tb_artikel.next_page_number }}">Next</a>
+                    <a class="page-link" href="/kategori/<slug:kategori_Artikel>/?page={{ tb_artikel.next_page_number }}">Next</a>
                   </li>
                   {% else %}
                   <li class="page-item disabled">
@@ -68,35 +111,74 @@
                   {% endif %}
 
                 </ul>
-              </nav>
-              {% endif %}
-        </div>
-        <div class="col-sm">
-            <div class="card" style="background-color: #4000ff;">
-              <h5 class="card-header text-light"><b>Kategori Lainnya</b></h5>
-              <div class="card-body">
-                    <a href="/artikel" class="text-white"><b>Semua Kategori</b><hr>
-                {% for kategorilain in kategori %}
-                    {% if kategorilain.kategori != kategori_Artikel %}
-                        <a href="/kategori/{{ kategorilain.kategori }}" class="text-white">{{ kategorilain.kategori }}</a><hr>
-                    {% endif %}
-                {% endfor %}
               </div>
-            </div>
-            <br>
-            <div class="card" style="background-color: #4000ff;">
-                <h5 class="card-header text-light"><b>Artikel Serupa</b></h5>
-                <div class="card-body">
-                    {% for kategorilain in kategori %}
-                        {% if forloop.counter <= 5 %}
-                            <a href="{% url 'detail' slug_Artikel=kategorilain.slug %}" class="text-white">{{ kategorilain.judul }}</a><hr>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+              {% endif %}
+          </div>
+          <!-- End blog entries list -->
 
+          <div class="col-lg-4">
+
+            <div class="sidebar">
+              <!-- start sidebar search formn-->
+               <form action="" method="get" class="mb-4">
+                  {% csrf_token %}
+                  <h3 class="sidebar-title">Search</h3>
+                  <div class="row">
+                    <div class="col input-group">
+                    <input type="search" name="cari" placeholder="Cari nama Artikel" class="form-control">
+                    <button type="submit" class="btn btn-primary">
+                      <i class='bx bx-search-alt-2'></i>
+                    </button>
+                    </div>
+                  </div><br>
+                  <div class="input-group">
+                      <input type="date" name="tanggal" class="form-control">
+                      <button type="submit" class="btn btn-primary">
+                      <i class='bx bx-calendar'></i>
+                    </button>
+                  </div>
+                </form>
+              <!-- End sidebar search formn-->
+
+              <!-- End sidebar categories-->
+              <h3 class="sidebar-title">Categories</h3>
+              <div class="sidebar-item categories">
+              {% for kategorilain in kategori %}
+                {% if kategorilain.kategori != kategori_Artikel %}
+                <ul>
+                  <li><a href="/kategori/{{ kategorilain.kategori }}">{{ kategorilain.kategori }}</a></li>
+                </ul>
+                {% endif %}
+              {% endfor %}
+              </div>
+              <!-- End sidebar categories-->
+
+              <!-- End sidebar recent posts-->
+              <h3 class="sidebar-title">Recent Posts</h3>
+              <div class="sidebar-item recent-posts">
+              {% for kategorilain in kategori %}
+                {% if forloop.counter <= 5 %}
+                <div class="post-item clearfix">
+                  <img src="{{ kategorilain.image.url }}" alt="" class="img-fluid mx-auto d-block">
+                  <h4><a href="{% url 'detail' slug_Artikel=kategorilain.slug %}">{{ kategorilain.judul }}</a></h4>
+                  <time datetime="2020-01-01">{{ kategorilain.publikasi | date }}</time>
+                </div>
+                {% endif %}
+              {% endfor %}
+
+              </div>
+              <!-- End sidebar recent posts-->
+
+            </div>
+            <!-- End sidebar -->
+
+          </div>
+          <!-- End blog sidebar -->
+
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- ======= End Main ======= -->
 
 {% endblock %}

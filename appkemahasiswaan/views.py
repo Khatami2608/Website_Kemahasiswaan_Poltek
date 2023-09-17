@@ -1,64 +1,90 @@
 from django.shortcuts import render, redirect
 from appkemahasiswaan.models import *
+from django.db.models import Q
 from .forms import *
 from django.contrib import messages
 from django.views.generic import *
 from django.core.paginator import Paginator 
 from urllib.parse import urlencode
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
-# Tambah Artikel
-def tambah_artikel(request):
-    konteks = {}
 
-    if request.POST:
-        form = FormArtikel(request.POST, request.FILES)
+def tambah_kategori(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            form = FormArtikel()
-            pesan = "Data Berhasil Disimpan"
+            return redirect('tambah_artikel')  # Gantilah 'nama_url_yang_anda_inginkan' dengan URL yang sesuai.
+    else:
+        form = CategoryForm()
+    return render(request, 'artikel/tambah_kategori.html', {'form': form})
 
-            konteks = {
-                'form': form,
-                'pesan': pesan,
-            }
-            return render(request, 'artikel/tambah_artikel.html', konteks)
+def kategori(request):
+    kategori = Category.objects.all()
+
+    konteks = {
+        'kategori': kategori,
+    }
+    return render(request, 'artikel/hapus_kategori.html', konteks)
+
+def hapus_kategori(request, id_kategori):
+    kategori = Category.objects.filter(id=id_kategori)
+    kategori.delete()
+
+    messages.success(request, 'Data Berhasil Dihapus!')
+    return redirect('/hapus-kategori/')
+
+def tambah_artikel(request):
+    konteks = {}
+    pesan = None  # Tambahkan ini di sini
+
+    if request.method == 'POST':
+        form = FormArtikel(request.POST, request.FILES)
+        if form.is_valid():
+            artikel = form.save(commit=False)
+            action = request.POST.get('action')
+            if action == 'draft':
+                artikel.status = 'draft'
+                pesan = "Data Berhasil Disimpan sebagai Draft"
+            elif action == 'publish':
+                artikel.status = 'published'
+                artikel.published_date = timezone.now()
+                pesan = "Data Berhasil Dipublikasikan"
+            artikel.save()
+            form = FormArtikel()
         else:
             pesan2 = "Lengkapi data yang ada"
-
             konteks = {
                 'form': form,
                 'pesan2': pesan2,
             }
+            return render(request, 'artikel/tambah_artikel.html', konteks)
 
     else:
         form = FormArtikel()
 
-        konteks = {
-            'form': form,
-        }    
+    konteks = {
+        'form': form,
+        'pesan': pesan,  # Sertakan pesan dalam konteks
+    }
+    
     return render(request, 'artikel/tambah_artikel.html', konteks)
+
+def publish_artikel(request, artikel_id):
+    artikel = get_object_or_404(Artikel, id=artikel_id)
+    artikel.publish()
+    return redirect('artikel:detail', slug=artikel.slug)
+
+def draft_artikel(request, artikel_id):
+    artikel = get_object_or_404(Artikel, id=artikel_id)
+    artikel.unpublish()
+    return redirect('artikel:detail', slug=artikel.slug)
 
 def Tabel_ArtikelView(request):
     ordering = '-publikasi'
-    keyword = request.GET.get('cari')  # Use GET instead of POST for search keyword
-    cari_tgl = request.GET.get('cari_tgl')  # Change to 'cari_tgl'
 
-    tb_artikel = Artikel.objects.all()
-
-    if keyword:
-        tb_artikel = tb_artikel.filter(judul__icontains=keyword)
-
-    # Filter berdasarkan tanggal_publikasi
-    if cari_tgl:
-        tb_artikel = tb_artikel.filter(publikasi__date=cari_tgl)
-
-    # Ordering
-    tb_artikel = tb_artikel.order_by(ordering)
-
-    # Pagination
-    paginator = Paginator(tb_artikel, 2) 
-    page_number = request.GET.get('page')
-    tb_artikel = paginator.get_page(page_number)
+    tb_artikel = Artikel.objects.all().order_by(ordering)
 
     konteks = {
         'tb_artikel': tb_artikel,
@@ -92,32 +118,12 @@ def Hapus_Artikel(request, id_Artikel):
 
 # START VIEW UNTUK PRESTASI
 def PrestasiView(request):
-    nama = request.GET.get('carinama')
     ordering = request.GET.get('ordering', '-nama')
-    form = FormPrestasi()
-    prodi = request.GET.get('cariprodi')
     
-    pretasi = Prestasi.objects.all()
-
-    if nama:
-        pretasi = pretasi.filter(
-            Q(nama__icontains=nama) | Q(nim__icontains=nama)
-        )
-
-    if prodi:
-        pretasi = pretasi.filter(prodi=prodi)
-
-    pretasi = pretasi.order_by(ordering)
-
-    paginator = Paginator(pretasi, 2)  # Menampilkan 2 item per halaman
-    page_number = request.GET.get('page')
-    pretasi = paginator.get_page(page_number)
+    pretasi = Prestasi.objects.all().order_by(ordering)
 
     konteks = {
-        'form': form,
         'pretasi': pretasi,
-        'nama': nama,
-        'prodi': prodi,
         'ordering': ordering,
     }
 
@@ -215,53 +221,34 @@ def AddPelanggaranView(request):
 
 # Tampilkan Data Pelanggaran
 def PelanggaranView(request):
-    nama = request.GET.get('carinama')
     ordering = '-publikasi'
-    form = FormPelanggaran()
-    prodi = request.GET.get('cariprodi')
-    
-    pelanggaran = Pelanggaran.objects.all()
-
-    if nama:
-        pelanggaran = pelanggaran.filter(
-            Q(nama__icontains=nama) | Q(nim__icontains=nama)
-        )
-
-    if prodi:
-        pelanggaran = pelanggaran.filter(prodi=prodi)
-
-    pelanggaran = pelanggaran.order_by(ordering)
-
-    paginator = Paginator(pelanggaran, 2)  # Menampilkan 2 item per halaman
-    page_number = request.GET.get('page')
-    pelanggaran = paginator.get_page(page_number)
+    pelanggaran = Pelanggaran.objects.all().order_by(ordering)
 
     konteks = {
-        'form': form,
         'pelanggaran': pelanggaran,
-        'nama': nama,
-        'prodi': prodi,
         'ordering': ordering,
     }
 
     return render(request, 'pelanggaran/tabel-pelanggaran.html', konteks)
 
-def EditPelanggaranView(request, nim_Pelanggaran):
-    pelanggaran = Pelanggaran.objects.get(nim=nim_Pelanggaran)
-    template = 'pelanggaran/Edit-pelanggaran.html'
-    if request.POST:
-        form = FormPelanggaran(request.POST, request.FILES, instance=pelanggaran)
+def EditPelanggaranView(request, nim_pelanggaran):
+    pelanggaran = get_object_or_404(Pelanggaran, nim=nim_pelanggaran)
+    form = FormPelanggaran(instance=pelanggaran)
+    pesan = ""
+
+    if request.method == 'POST':
+        form = FormPelanggaran(request.POST, instance=pelanggaran)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Data Berhasil Diperbaharui!')
-            return redirect('Edit_pelanggaran', nim_Pelanggaran=nim_Pelanggaran)
-    else:
-        form = FormPelanggaran(instance=pelanggaran)
-        konteks = {
-            'form': form,
-            'pelanggaran': pelanggaran,
-        }
-    return render(request, template, konteks)
+            pesan = "Data Berhasil Diubah"
+            return redirect('/pelanggaran/')  # Anda dapat menggantinya dengan URL yang sesuai
+
+    konteks = {
+        'form': form,
+        'pesan': pesan,
+    }
+
+    return render(request, 'pelanggaran/edit-pelanggaran.html', konteks)
 
 def HapusPelanggaranView(request, nim_pelanggaran):
     pelanggaran = Pelanggaran.objects.filter(nim=nim_pelanggaran)
@@ -311,7 +298,7 @@ def DataBeasiswa(request):
     if nama:
         data_beasiswa = data_beasiswa.filter(nama__icontains=nama)
 
-    paginator = Paginator(data_beasiswa, 2)  # Menampilkan 2 item per halaman
+    paginator = Paginator(data_beasiswa, 10)  # Menampilkan 2 item per halaman
     page_number = request.GET.get('page')
     data_beasiswa = paginator.get_page(page_number)
 
@@ -320,18 +307,17 @@ def DataBeasiswa(request):
         'nama': nama,
         'ordering': ordering,
     }
-
     return render(request, 'Data_Beasiswa/data-beasiswa.html', konteks)
 
-def Ubah_DataBeasiswa(request, id_Data_Beasiswa):
-    data_beasiswa = Data_Beasiswa.objects.get(id=id_Data_Beasiswa)
+def Ubah_DataBeasiswa(request, Data_Beasiswa_nama):
+    data_beasiswa = Data_Beasiswa.objects.get(nama=Data_Beasiswa_nama)
     template = 'Data_Beasiswa/Ubah-DataBeasiwa.html'
     if request.POST:
         form = FormDataBeasiswa(request.POST, request.FILES, instance=data_beasiswa)
         if form.is_valid():
             form.save()
             messages.success(request, 'Data Berhasil Diperbaharui!')
-            return redirect('Ubah_DataBeasiswa', id_Data_Beasiswa=id_Data_Beasiswa)
+            return redirect('Ubah_Data_Beasiswa', Data_Beasiswa_nama=Data_Beasiswa_nama)
     else:
         form = FormDataBeasiswa(instance=data_beasiswa)
         konteks = {
@@ -340,45 +326,53 @@ def Ubah_DataBeasiswa(request, id_Data_Beasiswa):
         }
     return render(request, template, konteks)
 
-def Hapus_DataBeasiswa(request, id_Data_Beasiswa):
-    data_beasiswa = Data_Beasiswa.objects.filter(id=id_Data_Beasiswa)
+def Hapus_DataBeasiswa(request, Data_Beasiswa_nama):
+    data_beasiswa = Data_Beasiswa.objects.filter(nama=Data_Beasiswa_nama)
     data_beasiswa.delete()
 
     messages.success(request, 'Data Berhasil Dihapus!')
     return redirect('/Data-Beasiswa/')
 
-# Start Penerima Beasiswa
 def Tambah_Penerima(request):
-    form = FormPenerima_Beasiswa()
+    form_penerima = FormPenerima_Beasiswa()
     pesan = ""
 
-    if request.POST:
-        form = FormPenerima_Beasiswa(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            form = FormPenerima_Beasiswa()
-            pesan = "Data Berhasil Disimpan"
+    if request.method == 'POST':
+        form_penerima = FormPenerima_Beasiswa(request.POST, request.FILES)
+        if form_penerima.is_valid():
+            penerima = form_penerima.save()  # Save penerima data
+            return redirect('tambah_beasiswa', nim_penerima=penerima.nim)
 
-            konteks = {
-                'form': form,
-                'pesan': pesan,
-            }
-            return render(request, 'Penerima_Beasiswa/tambah-penerima.html', konteks)
-        else:
-            pesan2 = "Lengkapi data yang ada"
-
-            konteks = {
-                'form': form,
-                'pesan2': pesan2,
-            }
-
+        pesan = "Lengkapi data yang ada"
 
     konteks = {
-        'form': form,
+        'form_penerima': form_penerima,
         'pesan': pesan,
     }
-    
     return render(request, 'Penerima_Beasiswa/tambah-penerima.html', konteks)
+
+def Tambah_Beasiswa(request, nim_penerima):
+    penerima = Penerima_Beasiswa.objects.get(nim=nim_penerima)
+    form_beasiswa = FormBeasiswa()
+    pesan = ""
+
+    if request.method == 'POST':
+        form_beasiswa = FormBeasiswa(request.POST)
+        if form_beasiswa.is_valid():
+            beasiswa = form_beasiswa.save(commit=False)
+            beasiswa.id_beasiswa = penerima
+            beasiswa.save()
+            pesan = "Data Berhasil Disimpan"
+        else:
+            pesan = "Lengkapi data yang ada"
+
+    konteks = {
+        'form_beasiswa': form_beasiswa,
+        'pesan': pesan,
+        'penerima': penerima,
+    }
+    return render(request, 'Penerima_Beasiswa/tambah-beasiswa.html', konteks)
+
 
 def Penerima_BeasiswaView(request):
     nama = request.GET.get('cari')
@@ -387,6 +381,7 @@ def Penerima_BeasiswaView(request):
     form = FormPenerima_Beasiswa()
     
     penerima = Penerima_Beasiswa.objects.all().order_by(ordering)
+    beasiswa = Beasiswa.objects.filter(id_beasiswa=penerima)
 
     if nama:
         penerima = penerima.filter(
@@ -402,6 +397,7 @@ def Penerima_BeasiswaView(request):
 
     konteks = {
         'penerima': penerima,
+        'beasiswa': beasiswa,
         'prodi': prodi,
         'form': form,
         'nama': nama,
@@ -409,22 +405,40 @@ def Penerima_BeasiswaView(request):
     }
     return render(request, 'Penerima_Beasiswa/penerima-beasiswa.html', konteks)
 
-def EditPenerima_Beasiswa(request, nim_Penerima_Beasiswa):
-    penerima = Penerima_Beasiswa.objects.get(nim=nim_Penerima_Beasiswa)
+def edit_penerima(request, nim_penerima):
+    penerima = Penerima_Beasiswa.objects.get(nim=nim_penerima)
     template = 'Penerima_Beasiswa/edit-penerima-beasiswa.html'
-    if request.POST:
+    if request.method == 'POST':
         form = FormPenerima_Beasiswa(request.POST, request.FILES, instance=penerima)
         if form.is_valid():
             form.save()
             messages.success(request, 'Data Berhasil Diperbaharui!')
-            return redirect('Edit_Penerima', nim_Penerima_Beasiswa=nim_Penerima_Beasiswa)
+            return redirect('edit_penerima', nim_penerima=nim_penerima)
     else:
         form = FormPenerima_Beasiswa(instance=penerima)
-        konteks = {
-            'form': form,
-            'penerima': penerima,
-        }
+
+    konteks = {
+        'form': form,
+        'penerima': penerima,
+    }
     return render(request, template, konteks)
+ 
+def edit_beasiswa(request, id_beasiswa):
+    beasiswa = get_object_or_404(Beasiswa, id_beasiswa=id_beasiswa)
+    if request.method == 'POST':
+        form = FormBeasiswa(request.POST, instance=beasiswa)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Data Beasiswa Berhasil Diperbaharui!')
+            return redirect('edit_beasiswa', id_beasiswa=id_beasiswa)
+    else:
+        form = FormBeasiswa(instance=beasiswa)
+
+    konteks = {
+        'form': form,
+        'beasiswa': beasiswa,
+    }
+    return render(request, 'Penerima_Beasiswa/edit-beasiswa.html', konteks)
 
 def Hapus_Penerima_Beasiswa(request, nim_Penerima_Beasiswa):
     penerima = Penerima_Beasiswa.objects.filter(nim=nim_Penerima_Beasiswa)
@@ -433,6 +447,34 @@ def Hapus_Penerima_Beasiswa(request, nim_Penerima_Beasiswa):
     messages.success(request, 'Data Berhasil Dihapus!')
     return redirect('/penerima-beasiswa/')
 
+def DetailPenerima(request, nim_Penerima_Beasiswa):
+    detail = get_object_or_404(Penerima_Beasiswa, nim=nim_Penerima_Beasiswa)
+    detail2 = Beasiswa.objects.filter(id_beasiswa=detail)
+    template = 'Penerima_Beasiswa/detail_penerima.html'
+    
+    pesan = ""
+
+    if request.method == 'POST':
+        form_beasiswa = FormBeasiswa(request.POST)
+        if form_beasiswa.is_valid():
+            beasiswa = form_beasiswa.save(commit=False)
+            beasiswa.id_beasiswa = detail  # Set the foreign key to the Penerima_Beasiswa instance
+            beasiswa.save()
+            pesan = "Data Berhasil Disimpan"
+        else:
+            pesan = "Lengkapi data yang ada"
+
+    form_beasiswa = FormBeasiswa()  # Create a new instance of the form for rendering
+    konteks = {
+        'form_beasiswa': form_beasiswa,
+        'pesan': pesan,
+        'detail': detail,
+        'detail2': detail2,
+    }
+    return render(request, template, konteks)
+
+
+# Praktek Magang
 def Tambah_Mhs_Magang(request):
     form = FormMahasiswa_Magang()
     pesan = ""
@@ -624,30 +666,11 @@ def Tambah_Anggota(request):
     return render(request, 'Anggota_Organisasi/tambah_anggota.html', konteks)
 
 def AnggotaView(request):
-    nama = request.GET.get('cari')
-    organisasi = request.GET.get('organisasi')
     ordering = '-publikasi'
-    form = Form_Anggota_Organisasi()
-    
     anggota = Anggota_Organisasi.objects.all().order_by(ordering)
-
-    if nama:
-        anggota = anggota.filter(
-            Q(nama__icontains=nama) | Q(nim__icontains=nama) | Q(angkatan__icontains=nama)
-        )
-
-    if organisasi:
-        anggota = anggota.filter(organisasi=organisasi)
-
-    paginator = Paginator(anggota, 2) 
-    page_number = request.GET.get('page')
-    anggota = paginator.get_page(page_number)
 
     konteks = {
         'anggota': anggota,
-        'organisasi': organisasi,
-        'form': form,
-        'nama': nama,
         'ordering': ordering,
     }
     return render(request, 'Anggota_Organisasi/data_anggota.html', konteks)
@@ -675,3 +698,32 @@ def Hapus_AnggotaView(request, id_anggota_Anggota_Organisasi):
 
     messages.success(request, 'Data Berhasil Dihapus!')
     return redirect('/data-anggota/')
+
+def tambah_user():
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password1']
+            user_type = form.cleaned_data['user_type']
+            user.set_password(password)  # Setel kata sandi pengguna
+            user.save()  # Simpan pengguna ke database
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Data berhasil disimpan.')
+                return redirect('dashboard')
+        else:
+            messages.error(request, 'Periksa Kembali !!.')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'User/tambah_user.html', {'form': form})
+
+def UserView(request):
+    userview = User.objects.all()
+
+    konteks = {
+        'userview': userview,
+    }
+    return render(request, 'User/data_user.html', konteks)

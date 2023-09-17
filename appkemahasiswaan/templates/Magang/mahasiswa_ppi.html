@@ -12,54 +12,18 @@
   <div class="card">
     <div class="card-body">
       <div class="container">
-        <div class="row">
+        <div class="row mb-4">
           <div class="col-md-12">
-            <div class="row">
+            <div class="row mb-4">
               <!-- Tambah data -->
               <div class="col-md-5">
                 <h3>
-                  Data Kegiatan :
+                  Tambah Data :
                   <a href="/tambah-mahasiswa-magang" class="btn btn-success btn-sm justify-content-end">Tambah +</a>
                 </h3>
               </div>
             </div>
               <!-- END tambah data -->
-
-              <!-- Start Filter -->
-              <div class="row">
-
-                <!-- Start Pencarian -->
-                <div class="col-sm">
-                  <form action="" method="get" class="g-3 mb-3">
-                  {% csrf_token %}
-                    <div class="row">
-                      <div class="col-md">
-                        <select class="form-select" aria-label="Default select example" name="prodi">
-                          <option value="" {% if not prodi %}selected{% endif %}>pilih prodi</option>
-                            {% for choice in form.prodi.field.choices %}
-                          <option value="{{ choice.0 }}" {% if prodi == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
-                            {% endfor %}
-                         </select>
-                      </div>
-                      <div class="col-md">
-                        <select class="form-select" aria-label="Default select example" name="smtr">
-                          <option value="" {% if not semester %}selected{% endif %}>pilih semester</option>
-                            {% for choice in form.semester.field.choices %}
-                          <option value="{{ choice.0 }}" {% if semester == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
-                            {% endfor %}
-                         </select>
-                      </div>
-                      <div class="col-sm d-flax justify-content-end input-group px-4">
-                        <input type="search" name="cari" placeholder="Cari nama dan nim" class="form-control d-flax justify-content-end">
-                        <button type="submit" class="btn btn-primary">
-                          <i class="fas fa-search fa-fw"></i>
-                        </button>
-                      </div> 
-                    </div>
-                  </form>      
-                </div> 
-                <!-- End Pencarian -->
-              </div>
 
             {% for message in messages %}
               {% if messages %}
@@ -73,9 +37,9 @@
 
             <!-- Start Tabel -->
             <div class="table-responsive text-nowrap"> 
-            <table id="table_id" class="display table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="table_id_info">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead class="thead-light">
-                <tr role="row">
+                <tr role="row" class="text-center">
                   <th>No.</th>
                   <th>NIM</th>
                   <th>Nama</th>
@@ -102,10 +66,12 @@
                   <td>{{ tb_magang.pembimbing }}</td>
                   <td>
                     <center>
-                      <a href="{% url 'Edit_Mahasiswa_PPI' nim_Mahasiswa_Magang=tb_magang.nim %}">
-                        <i class="menu-icon tf-icons bx bxs-edit" style="color: #ffcc00;"></i>
-                      </a>
-                      <i type="button" class="menu-icon tf-icons bx bxs-trash" data-bs-toggle="modal" data-bs-target="#hapus-{{ tb_magang.nim }}" style="color: #b30000;"></i>
+                        <a href="{% url 'Edit_Mahasiswa_PPI' nim_Mahasiswa_Magang=tb_magang.nim %}" class="btn btn-warning">
+                          <i class="menu-icon tf-icons bx bxs-edit" style=""></i>
+                        </a>
+                      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus-{{ tb_magang.nim }}">
+                        <i class="menu-icon tf-icons bx bxs-trash"></i>
+                      </button>
                     </center>
                   </td>
                   <div class="modal" tabindex="-1" id="hapus-{{ tb_magang.nim }}">
@@ -152,48 +118,6 @@
             <!-- End tabel -->
           </div>
 
-          <!-- Page Halaman -->
-              <div class="col-md d-flex justify-content-end pt-5">
-              {% if magang.has_other_pages %}
-                <nav aria-label="Pagination">
-                  <ul class="pagination">
-
-                    {% if magang.has_previous %}
-                      <li class="page-item">
-                        <a class="page-link" href="/mahasiswa-ppi?page={{ magang.previous_page_number }}">Previous</a>
-                      </li>
-                    {% else %}
-                      <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
-                      </li>
-                    {% endif %}
-
-                    {% for page in magang.paginator.page_range %}
-                      {% if magang.number == page %}
-                        <li class="page-item active" aria-current="page">
-                          <span class="page-link">{{ page }}</span>
-                        </li>
-                      {% else %}
-                        <li class="page-item">
-                          <a class="page-link" href="/mahasiswa-ppi?page={{ page }}">{{ page }}</a>
-                        </li>
-                      {% endif %}
-                    {% endfor %}
-
-                    {% if magang.has_next %}
-                      <li class="page-item">
-                        <a class="page-link" href="/mahasiswa-ppi?page={{ magang.next_page_number }}">Next</a>
-                      </li>
-                    {% else %}
-                      <li class="page-item disabled">
-                        <a class="page-link">Next</a>
-                      </li>
-                    {% endif %}
-
-                  </ul>
-                </nav>
-              {% endif %}
-            </div>
         </div>
       </div>
     </div>

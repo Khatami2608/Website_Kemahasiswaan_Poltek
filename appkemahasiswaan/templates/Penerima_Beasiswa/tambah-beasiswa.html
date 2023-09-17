@@ -1,0 +1,71 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+  Tambah Penerima Beasiswa - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Penerima Beasiswa /</span> Tambah Penerima Beasiswa</h4>
+
+    <div class="card">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Buat Data Beasiswa</h6>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        {% if pesan %}
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <i class="bx bxs-check-square"></i>
+                            {{ pesan }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endif %}
+                        {% if pesan2 %}
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <i class="bx bxs-error"></i>
+                            {{ pesan2 }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endif %}
+                        <h5></h5>
+                        <form action="{% url 'tambah_beasiswa' penerima.nim %}" method="post">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <label class="col-sm-2" for="id_nim">NIM</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="id_nim" name="id_beasiswa" value="{{ penerima.nim }}" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2" for="id_beasiswa">Nama Beasiswa</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="id_beasiswa" name="beasiswa">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2" for="id_beasiswa">Periode Beasiswa</label>
+                                <div class="col-sm">
+                                    <input type="text" class="form-control" id="id_smstr_awal" name="smstr_awal">
+                                </div>
+                                <div class="col-sm">
+                                    <input type="text" class="form-control" id="id_smstr_akhir" name="smstr_akhir">
+                                </div>
+                            </div>     
+                            <div class="row justify-content-end">
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary">Simpan<i class="bx bxs-save px-1"></i></button>
+                                    <a href="/penerima-beasiswa" class="btn btn-danger">Kembali</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

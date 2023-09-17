@@ -1,0 +1,99 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+  Beasiswa {{ detail.nama }} - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Penerima Beasiswa /</span> Detail Penerima Beasiswa</h4>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+               {% if pesan %}
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <i class="bx bxs-check-square"></i>
+                            {{ pesan }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endif %}
+                <h4 class="font-weight-bold">Beasiswa {{ detail.nama }}</h4>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3 mb-4">
+                        <img src="{{ detail.foto.url }}">
+                    </div>
+                    <div class="col-md">
+                        <h6 class="mb-4"> NIM              : {{ detail.nim }}</h6>
+                        <h6 class="mb-4"> Nama             : {{ detail.nama }}</h6>
+                        <h6 class="mb-4"> Angkatan         : {{ detail.angkatan }}</h6>
+                        <h6 class="mb-4"> Prodi            : {{ detail.prodi }}</h6>
+                        <h6 class="mb-4"> Jenis Kelamin    : {{ detail.gender }}</h6>
+                        <h6 class="mb-4"> Status Mahasiswa : {{ detail.status }}</h6>
+                        <hr>
+                        <div>
+                          <h4 class="text-uppercase mb-4">Beasiswa yang di peroleh</h4>
+                          <ul class="list">
+                          {% for item in detail2 %}
+                            <li class="list-item">
+                              <h6>{{ item.beasiswa }}</h6>
+                              <p class="text-black-60">Jangka Beasiswa : {{ item.smstr_awal }} - {{ item.smstr_akhir }}</p>
+                            </li>
+                          {% endfor %}
+                          </ul>
+                        </div>
+                        <div class="col-sm d-flex justify-content-end pt-5">
+                            <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#detail-{{ detail.nim }}">
+                              tambah beasiswa
+                            </button>
+                            <a href="/penerima-beasiswa" class="btn btn-success">Kembali</a> 
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="detail-{{ detail.nim }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Tambah Beasiswa</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form action="{% url 'detail_penerima' detail.nim %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                      <div class="row mb-3">
+                                          <label class="col-sm-2" for="id_nim">NIM</label>
+                                          <div class="col-sm-10">
+                                              <input type="text" class="form-control" id="id_nim" name="id_beasiswa" value="{{ detail.nim }}" readonly>
+                                          </div>
+                                      </div>
+                                      <div class="row mb-3">
+                                          <label class="col-sm-2" for="id_beasiswa">Nama Beasiswa</label>
+                                          <div class="col-sm-10">
+                                              <input type="text" class="form-control" id="id_beasiswa" name="beasiswa">
+                                          </div>
+                                      </div>
+                                      <div class="row mb-3">
+                                          <label class="col-sm-2" for="id_beasiswa">Periode Beasiswa</label>
+                                          <div class="col-sm">
+                                              <input type="text" class="form-control" id="id_smstr_awal" name="smstr_awal">
+                                          </div>
+                                          <div class="col-sm">
+                                              <input type="text" class="form-control" id="id_smstr_akhir" name="smstr_akhir">
+                                          </div>
+                                      </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Simpan<i class="bx bxs-save px-1"></i></button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+          
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

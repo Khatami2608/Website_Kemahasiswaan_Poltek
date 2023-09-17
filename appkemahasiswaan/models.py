@@ -2,6 +2,7 @@ from django.db import models
 from PIL import Image
 from django.utils.text import slugify
 import uuid
+from ckeditor.fields import RichTextField
 
 class Category(models.Model):
 	kategori = models.CharField(max_length=60)
@@ -10,27 +11,47 @@ class Category(models.Model):
 	 	return self.kategori 
 
 class Artikel(models.Model):
-	judul = models.CharField(max_length=225)
-	Deskripsi = models.TextField()
-	kategori = models.CharField(max_length=60)
-	image = models.ImageField(upload_to='covers/', null=True)
-	publikasi = models.DateTimeField(auto_now_add=True)
-	update = models.DateTimeField(auto_now=True)
-	slug = models.SlugField(blank=True, editable=False)
+    PUBLISH_CHOICES = (
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    )
 
-	def save(self):
-		self.slug = slugify(self.judul)
-		super().save()
+    judul = models.CharField(max_length=225)
+    Deskripsi = RichTextField(blank=True, null=True)
+    kategori = models.ForeignKey(Category, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='covers/', null=True)
+    publikasi = models.DateTimeField(auto_now_add=True)
+    published_date = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=10, choices=PUBLISH_CHOICES, default='draft')
+    update = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(blank=True, editable=False)
 
-	def get_absolute_url(self):
-		url_slug = {'slug':self.slug}
-		return reverse('kegiatan:detail', kwargs = url_slug)
+    def publish(self):
+        self.published_date = timezone.now()
+        self.status = 'published'
+        self.save()
 
-	def __str__(self):
-	 	return self.judul 
+    def unpublish(self):
+        self.published_date = None
+        self.status = 'draft'
+        self.save()
+
+    def save(self):
+        self.slug = slugify(self.judul)
+        super().save()
+
+    def get_absolute_url(self):
+        url_slug = {'slug': self.slug}
+        return reverse('artikel:detail', kwargs=url_slug)
+
+    def __str__(self):
+        return self.judul
+
 
 class Prodi(models.Model):
     prodi = models.CharField(max_length=100)
+    ka_prodi = models.CharField(max_length=100, default='default_value')
+    nrp = models.IntegerField(default=0)
 
     def __str__(self):
         return self.prodi
@@ -80,8 +101,8 @@ class Data_Beasiswa(models.Model):
     benefit = models.TextField()
     deskripsi = models.TextField()
     persyaratan = models.TextField()
-    ip_minimal = models.IntegerField()
-    ipk_minimal = models.IntegerField()
+    ip_minimal = models.CharField(max_length=10)
+    ipk_minimal = models.CharField(max_length=10)
     status = models.CharField(max_length=200)
     image = models.ImageField(upload_to='covers/', null=True)
     publikasi = models.DateTimeField(auto_now_add=True)
@@ -91,17 +112,25 @@ class Data_Beasiswa(models.Model):
 
 class Penerima_Beasiswa(models.Model):
     nim = models.IntegerField(primary_key=True)
-    nama = models.CharField(max_length=100)
+    nama = models.CharField(max_length=200)
     angkatan = models.IntegerField()
-    gender = models.CharField(max_length=20, choices=GENDER_CHOICES)
-    email = models.CharField(max_length=100) 
     prodi = models.ForeignKey(Prodi, on_delete=models.CASCADE)
-    beasiswa = models.CharField(max_length=200)
     status = models.CharField(max_length=100)
     publikasi = models.DateTimeField(auto_now_add=True)
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, default='laki-laki')
+    foto = models.ImageField(upload_to='covers/penerima_beasiswa/', null=True)
 
     def __str__(self):
         return str(self.nim)
+
+class Beasiswa(models.Model):
+    id_beasiswa = models.ForeignKey(Penerima_Beasiswa, on_delete=models.CASCADE)
+    beasiswa = models.CharField(max_length=200)
+    smstr_awal = models.CharField(max_length=80, null=True)
+    smstr_akhir = models.CharField(max_length=80, null=True)
+
+    def __str__(self):
+        return str(self.id_beasiswa)
 
 class Mahasiswa_Magang(models.Model):
     nim = models.IntegerField(primary_key=True)

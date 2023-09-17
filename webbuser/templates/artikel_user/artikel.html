@@ -5,30 +5,56 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
 {% endblock %}
 
 {% block content %}
-<div class="container">
-	
-	<center>
-		<h1>Ini Halaman Artikel</h1>
-	</center>
+  <!-- ======= Main ======= -->
+  <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
 
-	<div class="row">
-		<div class="col-md-8">
-			{% for artikel in tb_artikel %}
-			<div class="card mb-3">
-	          <div class="row g-0">
-	            <div class="col-md-4">
-	                <img class="card-img card-img-left" src="{{ artikel.image.url }}" alt="Card image" style="max-width: 200px; max-height: 190px;"/>
-	            </div>
-	            <div class="col-sm">
-	              <div class="card-body">
-	                <h5 class="card-title"><a class="text-dark" href="{% url 'detail' slug_Artikel=artikel.slug %}"><b>{{ artikel.judul }}</b></h5>
-	                  <p class="card-text"><small class="text-muted">kategori : {{ artikel.kategori }} | {{ artikel.publikasi | date }}</small></p>
-	                  <p class="card-text">
-	                    {{ artikel.Deskripsi | truncatewords:20 }} <a href="{% url 'detail' slug_Artikel=artikel.slug %}">selengkapnya</a></p>
-	              </div>
-	            </div>
-	          </div>
-            </div>
+        <ol>
+          <li><a href="/home">Home</a></li>
+          <li>Aktivitas</li>
+        </ol>
+        <h2>mapa informations</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+        <!-- ======= Blog Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row">
+
+          <div class="col-lg-8 entries">
+            {% for artikel in tb_artikel %}
+            <article class="entry">
+
+              <div class="entry-img">
+                <img src="{{ artikel.image.url }}" alt="" class="img-fluid mx-auto d-block">
+              </div>
+
+
+              <div class="entry-meta">
+                <ul>
+                  <li class="d-flex align-items-center"><i class="bi bi-folder"></i> <a href="blog-single.html">{{ artikel.kategori }}</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-calendar"></i> <a href="blog-single.html"><time datetime="2020-01-01">{{ artikel.publikasi | date }}</time></a></li>
+                </ul>
+              </div>
+
+              <div class="entry-content">
+                <h2 class="entry-title">
+                  <a href="{% url 'detail' slug_Artikel=artikel.slug %}">{{ artikel.judul }}</a>
+                </h2>
+                <!-- <p>
+                  {{ artikel.Deskripsi|safe| truncatewords:20 }}
+                </p> -->
+                <div class="read-more">
+                  <a href="{% url 'detail' slug_Artikel=artikel.slug %}">Read More</a>
+                </div>
+              </div>
+
+            </article><!-- End blog entry -->
             {% empty %}
                       <div class="misc-wrapper">
                         <h2 class="mb-2 mx-2">Artikel Tidak Ditemukan :(</h2>
@@ -45,11 +71,11 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
                           />
                         </div>
                       </div>
-			{% endfor %}
+            {% endfor %}
 
-			 {% if tb_artikel.has_other_pages %}
-              <nav aria-label="Pagination">
-                <ul class="pagination">
+            {% if tb_artikel.has_other_pages %}
+              <div class="blog-pagination">
+                <ul class="pagination justify-content-center">
 
                   {% if tb_artikel.has_previous %}
                   <li class="page-item">
@@ -84,17 +110,23 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
                   {% endif %}
 
                 </ul>
-              </nav>
+              </div>
               {% endif %}
-		</div>
-		<div class="col-sm">
-      <form action="" method="get">
+          </div>
+          <!-- End blog entries list -->
+
+          <div class="col-lg-4">
+
+            <div class="sidebar">
+              <!-- start sidebar search formn-->
+               <form action="" method="get" class="mb-4">
                   {% csrf_token %}
+                  <h3 class="sidebar-title">Search</h3>
                   <div class="row">
                     <div class="col input-group">
                     <input type="search" name="cari" placeholder="Cari nama Artikel" class="form-control">
                     <button type="submit" class="btn btn-primary">
-                      <i class="fas fa-search fa-fw"></i>
+                      <i class='bx bx-search-alt-2'></i>
                     </button>
                     </div>
                   </div><br>
@@ -104,19 +136,32 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
                       <i class='bx bx-calendar'></i>
                     </button>
                   </div>
-                </form><br>
-			<div class="card" style="background-color: #4000ff;">
-              <h5 class="card-header text-light"><b>Kategori Lainnya</b></h5>
-              <div class="card-body">
-                    <a href="/artikel" class="text-white"><b>Semua Kategori</b><hr>
-                {% for kategorilain in kategori %}
-                    {% if kategorilain.kategori != kategori_Artikel %}
-                        <a href="/kategori/{{ kategorilain.kategori }}" class="text-white">{{ kategorilain.kategori }}</a><hr>
-                    {% endif %}
-                {% endfor %}
+                </form>
+              <!-- End sidebar search formn-->
+
+              <!-- End sidebar categories-->
+              <h3 class="sidebar-title">Categories</h3>
+              <div class="sidebar-item categories">
+              {% for kategorilain in kategori %}
+                {% if kategorilain.kategori != kategori_Artikel %}
+                <ul>
+                  <li><a href="/kategori/{{ kategorilain.kategori }}">{{ kategorilain.kategori }}</a></li>
+                </ul>
+                {% endif %}
+              {% endfor %}
               </div>
+              <!-- End sidebar categories-->
+
             </div>
-		</div>
-	</div>
-</div>
+            <!-- End sidebar -->
+
+          </div>
+          <!-- End blog sidebar -->
+
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- ======= End Main ======= -->
+
 {% endblock %}

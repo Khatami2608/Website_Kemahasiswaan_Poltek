@@ -1,0 +1,83 @@
+{% extends 'user_layout/base.html' %}
+
+{% block page_title %}
+    Tambah Organisasi - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+
+<main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/home">Home</a></li>
+          <li>SKPI</li>
+        </ol>
+        <h2>Data SKPI</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Recent Blog Posts Section ======= -->
+    <section id="recent-blog-posts" class="recent-blog-posts">
+
+	    <div class="container" data-aos="fade-up">
+
+		{% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible" role="alert">
+			<i class='bx bxs-check-square'></i>
+				{{ message }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+        {% endfor %}
+        {% endif %}
+	        <div class="row">
+		        <div class="col">
+		        	<div class="post-box">
+		        		<h3>Tambah Organisasi </h3><hr>
+					    <form action="{% url 'sertifikasi' data_skpi_nim=dt_sertifikasi.nim %}" method="post" enctype="multipart/form-data">
+					        {% csrf_token %}
+					        <div class="row mb-3">
+                                <label class="col-sm-2" for="id_nim">NIM</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="nim" value="{{ dt_sertifikasi.nim }}" readonly>
+                                </div>
+                            </div>
+
+
+					        <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Bidang / Kompetensi</label>
+				                <div class="col-sm-10">
+				                  {{ form.bidang }}
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Nomor Sertifikat</label>
+				                <div class="col-sm-10">
+				                  {{ form.no_sertifikat }}
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Penerbit</label>
+				                <div class="col-sm-10">
+				                  {{ form.penerbit }}
+				                </div>
+				            </div>
+				            <div class="row justify-content-end">
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-primary">Save<i class='bx bxs-save px-1'></i></button>
+									<a href="{% url 'data_skpi' dt_sertifikasi.nim %}" class="btn btn-danger">Kembali</a>
+								</div>
+							</div>
+					    </form>
+		        	</div>
+		        </div>
+		    </div>
+		</div>
+	</section>
+</main>
+    
+{% endblock %}

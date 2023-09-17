@@ -1,0 +1,51 @@
+{% extends 'user_layout/base.html' %}
+
+{% block page_title %}
+    Input Data Training - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+
+<main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/home">Home</a></li>
+          <li>Personal CV</li>
+        </ol>
+        <h2>Curriculum Vitae</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Recent Blog Posts Section ======= -->
+    <section id="recent-blog-posts" class="recent-blog-posts">
+
+	    <div class="container" data-aos="fade-up">
+
+	        <header class="section-header">
+	          <p>Buat Data CV</p>
+	        </header>
+
+	        <div class="row">
+
+		        <div class="col">
+		        	<div class="post-box">
+		        		<h1>Input Training</h1>
+					    <p>Personal Info: {{ personal_info.first_name }} {{ personal_info.last_name }}</p>
+					    <form method="post">
+					        {% csrf_token %}
+					        {{ form.as_p }}
+					        <button type="submit">Finish</button>
+					    </form>
+		        	</div>
+		        </div>
+		    </div>
+		</div>
+	</section>
+</main>
+
+    
+{% endblock %}

@@ -7,51 +7,23 @@ Halaman Penerima Beasiswa - Kemahasiswaan Poltek Aceh
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
   <h4 class="fw-bold py-3 mb-4">
-    <span class="text-muted fw-light">Penerima Beasiswa /</span>Data Penerima Beasiswa 
+    <span class="text-muted fw-light">Penerima Beasiswa /</span> Data Penerima Beasiswa 
   </h4>
   <div class="card">
     <div class="card-body">
       <div class="container">
-        <div class="row">
+        <div class="row mb-4">
           <div class="col-md-12">
             <div class="row">
               <!-- Tambah data -->
               <div class="col-md-5">
                 <h3>
-                  Data Kegiatan :
+                  Tambah Data :
                   <a href="/tambah-penerima-beasiswa" class="btn btn-success btn-sm justify-content-end">Tambah +</a>
                 </h3>
               </div>
             </div>
             <!-- END tambah data -->
-
-            <!-- Start Filter -->
-            <div class="row">
-
-              <!-- Start Pencarian -->
-              <div class="col-sm">
-                <form action="" method="get" class="g-3 mb-3">
-                  {% csrf_token %}
-                  <div class="row">
-                    <div class="col-md">
-                      <select class="form-select" aria-label="Default select example" name="cariprodi">
-                        <option value="" {% if not prodi %}selected{% endif %}>Pilih prodi</option>
-                        {% for choice in form.prodi.field.choices %}
-                        <option value="{{ choice.0 }}" {% if prodi == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                    <div class="col-sm d-flax justify-content-end input-group px-4">
-                      <input type="search" name="cari" placeholder="Cari nama dan nim" class="form-control d-flax justify-content-end">
-                      <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search fa-fw"></i>
-                      </button>
-                    </div> 
-                  </div>
-                </form>      
-              </div> 
-              <!-- End Pencarian -->
-            </div>
 
             {% for message in messages %}
             {% if messages %}
@@ -64,15 +36,16 @@ Halaman Penerima Beasiswa - Kemahasiswaan Poltek Aceh
             {% endfor %}
 
             <!-- Start Tabel -->
-            <table class="table table-bordered">
-              <thead class="text-center table-primary">
+          <div class="table-responsive text-nowrap"> 
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
                 <tr>
                   <th>No</th>
                   <th>NIM</th>
                   <th>Nama</th>
                   <th>Prodi</th>
                   <th class="text-center">Angkatan</th>
-                  <th>Beasiswa</th>
+                  <!-- <th>Beasiswa</th> -->
                   <th>Status</th>
                   <th scope="col" style="width: 8rem;">Action</th>
                 </tr>
@@ -85,12 +58,22 @@ Halaman Penerima Beasiswa - Kemahasiswaan Poltek Aceh
                   <td>{{ tb_penerima.nama }}</td>
                   <td>{{ tb_penerima.prodi }}</td>
                   <td class="text-center">{{ tb_penerima.angkatan }}</td>
-                  <td>{{ tb_penerima.beasiswa }}</td>
+                  <!-- <td>{{ beasiswa.beasiswa }}</td> -->
                   <td>{{ tb_penerima.status }}</td>
                   <td>
                     <center>
-                      <a href="{% url 'Edit_Penerima' tb_penerima.nim %}"><i class="menu-icon tf-icons bx bxs-edit" style="color: #ffcc00;"></i></a>
-                      <i type="button" class="menu-icon tf-icons bx bxs-trash" data-bs-toggle="modal" data-bs-target="#hapus-{{ tb_penerima.nim }}" style="color: #b30000;"></i>
+                      <!-- <a href="{% url 'edit_penerima' tb_penerima.nim %}" class="btn btn-warning">
+                        <i class="bx bxs-edit"></i>
+                      </a> -->
+                      <a href="{% url 'edit_penerima' tb_penerima.nim %}" class="btn btn-warning">
+                        <i class="bx bxs-edit"></i>
+                      </a>
+                      <a href="{% url 'detail_penerima' tb_penerima.nim %}" class="btn btn-primary">
+                        <i class='bx bx-show-alt'></i>
+                      </a>
+                      <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus-{{ tb_penerima.nim }}"> 
+                        <i class="bx bxs-trash"></i>
+                      </a>
                     </center>
                   </td>
                   <!-- Modal Hapus -->
@@ -127,6 +110,7 @@ Halaman Penerima Beasiswa - Kemahasiswaan Poltek Aceh
                 {% endfor %}
               </tbody>
             </table>
+          </div>
             <!-- End tabel -->
           </div>
 

@@ -1,0 +1,228 @@
+{% extends 'user_layout/base.html' %}
+
+{% block page_title %}
+    Input Info Mahasiswa - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+
+<main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/home">Home</a></li>
+          <li>SKPI</li>
+        </ol>
+        <h2>Data SKPI</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Recent Blog Posts Section ======= -->
+    <section id="recent-blog-posts" class="recent-blog-posts">
+
+	    <div class="container" data-aos="fade-up">
+
+	        			<!-- {% if pesan %}
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<i class='bx bxs-check-square'></i>
+							{{ pesan }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endif %}
+						{% if pesan2 %}
+						<div class="alert alert-danger alert-dismissible" role="alert">
+							<i class='bx bxs-error'></i>
+							{{ pesan2 }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endif %} -->
+
+	        <div class="row">
+		        <div class="col">
+		        	
+		        	<div class="post-box">
+		        		<div class="row">
+		        			<div class="col-sm-10">
+		        				<h3>Data diri mahasiswa</h3>
+		        			</div>
+		        			<div class="col">
+		        				<h3><a href="{% url 'Edit_data_skpi' skpi.nim %}" class="btn btn-primary justify-content-end">Edit</a></h3>
+		        			</div>
+		        		</div>	
+		        		<hr>
+		        		<div class="row mb-4">
+		        			<div class="col-sm-3 mb-4">
+		        				<img src="{{ skpi.foto.url }}">
+		        			</div>
+		        			<div class="col-sm">
+		        			<h6 class="mb-4">Nama Lengkap: {{ skpi.nama }}</h6>
+		        			<h6 class="mb-4">Jenis Kelamin : {{ skpi.gender }}</h6>
+		        			<h6 class="mb-4">Tempat & Tanggal Lahit: {{ skpi.tempat }} / {{ skpi.tgl_lahir }}</h6>
+		        			<h6 class="mb-4">Tahun Masuk / Lulus: {{ skpi.masuk }} / {{ skpi.lulus }}</h6>
+		        			<h6 class="mb-4">Nomor Induk Mahasiswa: {{ skpi.nim }}</h6>
+		        			<h6 class="mb-4">Program Praktik Industri: {{ skpi.ppi }}</h6>
+		        			<h6 class="mb-4">Judul Proyek Akhir: {{ skpi.ppi }}</h6>			
+		        			</div>
+		        		</div>
+
+		        		<div class="row">
+		        			<div class="col-sm-10">
+		        				<h3>Pengalaman Organisasi & MBKB</h3>
+		        			</div>
+		        			<div class="col">
+		        				<h3><a href="{% url 'tambah_organisasi' data_skpi_nim=skpi.nim %}" class="btn btn-success justify-content-end">Tambah</a></h3>
+		        			</div>
+		        		</div>	
+		        		<hr> 
+			            <table class="display table table-hover table-bordered dataTable no-footer mb-4" role="grid" aria-describedby="table_id_info">
+			              <thead class="thead-light text-center">
+						    <tr>
+						      <th scope="col">No.</th>
+						      <th scope="col">Organisasi/Kegiatan MBKM</th>
+						      <th scope="col">Jabatan/Penempatan</th>
+						      <th scope="col">Periode/Waktu</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						  	{% for tb_organisasi in Organisasi %}
+						    <tr>
+						      <th scope="row" class="text-center">{{ forloop.counter }}</th>
+						      <td>{{ tb_organisasi.kegiatan }}</td>
+						      <td class="text-center">{{ tb_organisasi.penempatan }}</td>
+						      <td class="text-center">{{ tb_organisasi.periode }}</td>
+						    </tr>
+						    {% endfor %}
+						  </tbody>
+						</table>
+
+						<div class="row">
+		        			<div class="col-sm-10">
+		        				<h3>Pelatihan & Seminar</h3>
+		        			</div>
+		        			<div class="col">
+		        				<h3><a href="{% url 'pelatihan' data_skpi_nim=skpi.nim %}" class="btn btn-success justify-content-end">Tambah</a></h3>
+		        			</div>
+		        		</div>	
+		        		<hr> 
+			            <table class="display table table-hover table-bordered dataTable no-footer mb-4" role="grid" aria-describedby="table_id_info">
+			              <thead class="thead-light text-center">
+						    <tr>
+						      <th scope="col">No.</th>
+						      <th scope="col">Pelatihan/Seminar</th>
+						      <th scope="col">Pelaksana</th>
+						      <th scope="col">Periode/Waktu</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						  	{% for tb_pelatihan in Pelatihan %}
+						    <tr>
+						      <th scope="row" class="text-center">{{ forloop.counter }}</th>
+						      <td>{{ tb_pelatihan.pelatihan }}</td>
+						      <td class="text-center">{{ tb_pelatihan.pelaksana }}</td>
+						      <td class="text-center">{{ tb_pelatihan.periode }}</td>
+						    </tr>
+						    {% endfor %}
+						  </tbody>
+						</table>
+
+						<div class="row">
+		        			<div class="col-sm-10">
+		        				<h3>Penghargaan & Juara</h3>
+		        			</div>
+		        			<div class="col">
+		        				<h3><a href="{% url 'penghargaan' data_skpi_nim=skpi.nim %}" class="btn btn-success justify-content-end">Tambah</a></h3>
+		        			</div>
+		        		</div>	
+		        		<hr> 
+		        		<table class="display table table-hover table-bordered dataTable no-footer mb-4" role="grid" aria-describedby="table_id_info">
+			              <thead class="thead-light text-center">
+						    <tr>
+						      <th scope="col">No.</th>
+						      <th scope="col">Kegiatan / Penghargaan</th>
+						      <th scope="col">Prestasi</th>
+						      <th scope="col">Periode / Waktu</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						  	{% for tb_penghargaan in Penghargaan %}
+						    <tr>
+						      <th scope="row" class="text-center">{{ forloop.counter }}</th>
+						      <td>{{ tb_penghargaan.penghargaan }}</td>
+						      <td class="text-center">{{ tb_penghargaan.prestasi }}</td>
+						      <td class="text-center">{{ tb_penghargaan.periode }}</td>
+						    </tr>
+						    {% endfor %}
+						  </tbody>
+						</table>
+
+						<div class="row">
+		        			<div class="col-sm-10">
+		        				<h3>Sertifikasi Profesional</h3>
+		        			</div>
+		        			<div class="col">
+		        				<h3><a href="{% url 'sertifikasi' data_skpi_nim=skpi.nim %}" class="btn btn-success justify-content-end">Tambah</a></h3>
+		        			</div>
+		        		</div>	
+		        		<hr>
+		        		<table class="display table table-hover table-bordered dataTable no-footer mb-4" role="grid" aria-describedby="table_id_info">
+			              <thead class="thead-light text-center">
+						    <tr>
+						      <th scope="col">No.</th>
+						      <th scope="col">Bidang / Kompetensi</th>
+						      <th scope="col">Nomor Sertifikasi</th>
+						      <th scope="col">Penerbit</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						  	{% for tb_sertifikasi in Sertifikasi %}
+						    <tr>
+						      <th scope="row" class="text-center">{{ forloop.counter }}</th>
+						      <td>{{ tb_sertifikasi.bidang }}</td>
+						      <td class="text-center">{{ tb_sertifikasi.no_sertifikat }}</td>
+						      <td class="text-center">{{ tb_sertifikasi.penerbit }}</td>
+						    </tr>
+						    {% endfor %}
+						  </tbody>
+						</table>
+
+						<div class="row">
+		        			<div class="col-sm-10">
+		        				<h3>Beasiswa</h3>
+		        			</div>
+		        			<div class="col">
+		        				<h3><a href="{% url 'tb_beasiswa' data_skpi_nim=skpi.nim %}" class="btn btn-success justify-content-end">Tambah</a></h3>
+		        			</div>
+		        		</div>	
+		        		<hr>
+		        		<table class="display table table-hover table-bordered dataTable no-footer mb-4" role="grid" aria-describedby="table_id_info">
+			              <thead class="thead-light text-center">
+						    <tr>
+						      <th scope="col">No.</th>
+						      <th scope="col">Nama Beasiswa</th>
+						      <th scope="col">Pemberi Beasiswa (Donatur)</th>
+						      <th scope="col">Periode</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						  	{% for tb_beasiswa in Beasiswa %}
+						    <tr>
+						      <th scope="row" class="text-center">{{ forloop.counter }}</th>
+						      <td>{{ tb_beasiswa.beasiswa }}</td>
+						      <td class="text-center">{{ tb_beasiswa.pemberi }}</td>
+						      <td class="text-center">{{ tb_beasiswa.periode }}</td>
+						    </tr>
+						    {% endfor %}
+						  </tbody>
+						</table>
+
+		        	</div>	
+		        </div>
+		    </div>
+		</div>
+	</section>
+</main>
+    
+{% endblock %}

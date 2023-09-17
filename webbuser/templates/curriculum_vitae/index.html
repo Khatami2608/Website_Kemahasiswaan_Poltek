@@ -1,0 +1,26 @@
+{% extends 'user_layout/base.html' %}
+
+{% block page_title %}
+Halaman Buat CV - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+<h1>Form Curriculum Vitae</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <h2>Informasi Personal</h2>
+    {{ personal_info_form.as_p }}
+
+    <h2>Pendidikan</h2>
+    {{ pendidikan_form.as_p }}
+
+    <h2>Skill</h2>
+    {{ skill_form.as_p }}
+
+    <h2>Training</h2>
+    {{ training_form.as_p }}
+
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

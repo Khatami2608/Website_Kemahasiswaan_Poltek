@@ -1,0 +1,140 @@
+{% extends 'user_layout/base.html' %}
+
+{% block page_title %}
+    Input Info Mahasiswa - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+
+<main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/home">Home</a></li>
+          <li>SKPI</li>
+        </ol>
+        <h2>Data SKPI</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Recent Blog Posts Section ======= -->
+    <section id="recent-blog-posts" class="recent-blog-posts">
+
+	    <div class="container" data-aos="fade-up">
+
+	        			{% if pesan %}
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<i class='bx bxs-check-square'></i>
+							{{ pesan }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endif %}
+						{% if pesan2 %}
+						<div class="alert alert-danger alert-dismissible" role="alert">
+							<i class='bx bxs-error'></i>
+							{{ pesan2 }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endif %}
+
+	        <div class="row">
+		        <div class="col">
+		        	<div class="post-box">
+		        		<h3>Data diri mahasiswa</h3><hr>
+					    <form action="/tambah-info-mahasiswa/" method="post" enctype="multipart/form-data">
+					        {% csrf_token %}
+					        <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">NIM</label>
+				                <div class="col-sm-10">
+				                  {{ form_skpi.nim }}
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Nama</label>
+				                <div class="col-sm-10">
+				                  {{ form_skpi.nama }}
+				                </div>
+				            </div><div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Program Studi</label>
+				                <div class="col-sm-10">
+				                  {{ form_skpi.prodi }}
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Gender</label>
+				                <div class="col-sm">
+				                  {{ form_skpi.gender }}
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Tempat/Tgl Lahir</label>
+				                <div class="col-sm">
+				                  {{ form_skpi.tempat }}
+				                </div>
+				                <div class="col-sm">
+				                  {{ form_skpi.tgl_lahir }}
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Tahun Masuk/ Lulus</label>
+				                <div class="col-sm">
+				                  {{ form_skpi.masuk }}
+				                </div>
+				                <div class="col-sm">
+				                  {{ form_skpi.lulus }}
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Program praktik Industri</label>
+				                <div class="col-sm-10">
+				                  {{ form_skpi.ppi }}
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Judul Proyek Akhir</label>
+				                <div class="col-sm-10">
+				                  {{ form_skpi.PA }}
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				                <label class="col-sm-2 col-form-label" for="basic-default-name">Foto</label>
+				                <div class="col-sm-10">
+				                  {{ form_skpi.foto }}
+				                  <small class="text-danger opacity-50"> Pas Photo Ijazah jas & dasi Kupu2 Layar merah</small>
+				                </div>
+				            </div>
+				            <div class="row mb-3">
+				              <label class="col-sm-2 col-form-label" for="basic-default-name"></label>
+				              <div class="col-sm-10">
+				                <img id="image-preview" style="max-width: 300px; max-height: 200px;" />
+				              </div>
+				            </div>
+				            <div class="row justify-content-end">
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-primary">Save<i class='bx bxs-save px-1'></i></button>
+									<a href="" class="btn btn-danger">Kembali</a>
+								</div>
+							</div>
+					    </form>
+		        	</div>
+		        </div>
+		    </div>
+		</div>
+	</section>
+</main>
+<script>
+  function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var imagePreview = document.getElementById('image-preview');
+      imagePreview.src = reader.result;
+    }
+    var selectedFile = event.target.files[0];
+    reader.readAsDataURL(selectedFile);
+  }
+</script>
+    
+{% endblock %}

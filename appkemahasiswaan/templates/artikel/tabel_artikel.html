@@ -15,31 +15,12 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
         <div class="container">
           <div class="row">
             <div class="col-md-12">
-              <div class="row">
+              <div class="row mb-4">
                 <div class="col-md-6">
                  <h5>
-                  Tambah Artikel : 
+                  Tambah Data : 
                   <a href="/tambah-artikel" class="btn btn-success btn-sm justify-content-end">Tambah +</a>
                 </h5>
-              </div>
-              <div class="col-sm">
-                <!-- Membuat Form Pencarian -->
-                <form action="" method="get" class="d-flex align-items-center">
-                  {% csrf_token %}
-                  <div class="row">
-                    <div class="col-md">
-                      <input type="date" name="cari_tgl" class="form-control">
-                    </div>
-                  </div>
-                  <div class="col-sm input-group px-3">
-                    <input type="search" name="cari" placeholder="Cari nama Artikel" class="form-control">
-                    <button type="submit" class="btn btn-primary">
-                      <i class="fas fa-search fa-fw"></i>
-                    </button>
-                  </div>
-                </form>
-                <!-- End Pencarian -->
-
               </div>
             </div>
 
@@ -52,35 +33,45 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
             </div>
             {% endif %}
             {% endfor %}
-            <table id="table_id" class="display table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="table_id_info">
-              <thead class="thead-light">
+            <table class="display table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="table_id_info" id="dataTable">
+              <thead class="text-center">
                 <tr role="row">
                   <th>No.</th>
                   <th>Artikel</th>
                   <th>Kategori</th>
-                  <th>Deskripsi</th>
                   <th>Image</th>
                   <th>Publikasi</th>
+                  <th>Status</th>
                   <th scope="col" style="width: 8rem;">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {% for Artikel in tb_artikel %}
                 <tr>
+                  {% with n=n|add:1 %}
+                  {% endwith %}
                   <td class="text-center">{{ forloop.counter }}</td>
                   <td>{{ Artikel.judul }}</td>
                   <td>{{ Artikel.kategori }}</td>
-                  <td>{{ Artikel.Deskripsi | truncatewords:20 }}</td>
+
                   {% if Artikel.image %}
                   <td class="d-flex justify-content-center"><img src="{{ Artikel.image.url }}" width="40px" height="40px"/></td>
                   {% else %}
                   <td class="d-flex justify-content-center">No image available</td>
-                  {% endif %}             
+                  {% endif %} 
+
                   <td>{{ Artikel.publikasi | date }}</td>
+
+                  {% if Artikel.status == 'draft' %}
+                  <td style="color: red;">{{ Artikel.status }}</td>
+                  {% elif Artikel.status == 'published' %}
+                  <td style="color: green;">{{ Artikel.status }}</td>
+                  {% endif %}
+
                   <td>
                     <center>
-                      <a href="{% url 'edit_artikel' Artikel.id %}"><i class="menu-icon tf-icons bx bxs-edit" style="color: #ffcc00;"></i></a> 
-                      <i type ="button" class="menu-icon tf-icons bx bxs-trash" data-bs-toggle="modal" data-bs-target="#hapus-{{ Artikel.id }}" style="color: #b30000;"></i>
+                      <a href="{% url 'edit_artikel' Artikel.id %}" class="btn btn-warning"><i class="menu-icon tf-icons bx bxs-edit"></i></a> 
+                      <i type ="button" class="menu-icon tf-icons bx bxs-trash btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus-{{ Artikel.id }}"></i>
                     </center>
                   </td>
                   <div class="modal" tabindex="-1" id="hapus-{{ Artikel.id }}">
@@ -127,7 +118,7 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
           </div>
 
           <!-- Page Halaman -->
-          <div class="col-md d-flex justify-content-end pt-5">
+         <!--  <div class="col-md d-flex justify-content-end pt-5">
             {% if tb_artikel.has_other_pages %}
             <nav aria-label="Pagination">
               <ul class="pagination">
@@ -167,7 +158,7 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
               </ul>
             </nav>
             {% endif %}
-          </div>
+          </div> -->
           <!-- End Page halaman -->
         </div>
       </div>

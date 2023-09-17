@@ -10,6 +10,9 @@
       <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Data Beasiswa /</span> Edit Data Beasiswa</h4>
 		<div class="card">
+			<div class="card-header py-3">
+		      <h6 class="m-0 font-weight-bold text-primary">Edit Data Beasiswa</h6>
+		    </div>
 		        <div class="card-body">
 					<div class="container">
 						<div class="row">
@@ -23,7 +26,7 @@
 										</div>
 									{% endif %}
 								{% endfor %}
-								<form action="{% url 'Ubah_DataBeasiswa' data_beasiswa.id %}" method="post">
+								<form action="/Edit-Data-Beasiswa/{{ data_beasiswa.nama }}/" method="post" enctype="multipart/form-data">
 								    {% csrf_token %}
 								    <div class="row mb-4">
 								    <label class="col-sm-2" for="basic-default-name">Nama</label>

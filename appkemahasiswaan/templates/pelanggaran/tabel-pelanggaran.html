@@ -14,44 +14,16 @@ Halaman Pelanggaran - Kemahasiswaan Poltek Aceh
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-            <div class="row">
+            <div class="row mb-4">
               <!-- Tambah data -->
               <div class="col-md-5">
                 <h3>
-                  Data Kegiatan :
+                  Tambah Data :
                   <a href="/tambah-pelanggaran" class="btn btn-success btn-sm justify-content-end">Tambah +</a>
                 </h3>
               </div>
             </div>
             <!-- END tambah data -->
-
-            <!-- Start Filter -->
-            <div class="row">
-
-              <!-- Start Pencarian -->
-              <div class="col-sm">
-                <form action="" method="get" class="g-3 mb-3">
-                  {% csrf_token %}
-                  <div class="row">
-                    <div class="col-md">
-                      <select class="form-select" aria-label="Default select example" name="cariprodi">
-                        <option value="" {% if not prodi %}selected{% endif %}>Pilih prodi</option>
-                        {% for choice in form.prodi.field.choices %}
-                        <option value="{{ choice.0 }}" {% if prodi == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                    <div class="col-sm d-flax justify-content-end input-group px-4">
-                      <input type="search" name="carinama" placeholder="Cari nama dan nim" class="form-control d-flax justify-content-end">
-                      <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search fa-fw"></i>
-                      </button>
-                    </div> 
-                  </div>
-                </form>      
-              </div> 
-              <!-- End Pencarian -->
-            </div>
 
             {% for message in messages %}
             {% if messages %}
@@ -65,9 +37,10 @@ Halaman Pelanggaran - Kemahasiswaan Poltek Aceh
 
             <!-- Start Tabel -->
             <div class="table-responsive text-nowrap"> 
-              <table id="table_id" class="display table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="table_id_info">
-              <thead class="thead-light">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
                 <tr role="row">
+                    <th>No.</th>
                     <th>NIM</th>
                     <th>Nama</th>
                     <th>Prodi</th>
@@ -81,6 +54,7 @@ Halaman Pelanggaran - Kemahasiswaan Poltek Aceh
                 <tbody>
                   {% for tb_pelanggaran in pelanggaran %}
                   <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
                     <td>{{ tb_pelanggaran.nim }}</td>
                     <td>{{ tb_pelanggaran.nama }}</td>
                     <td>{{ tb_pelanggaran.prodi }}</td>
@@ -90,7 +64,7 @@ Halaman Pelanggaran - Kemahasiswaan Poltek Aceh
                     <td>{{ tb_pelanggaran.publikasi | date }}</td>
                     <td>
                       <center>
-                        <a href="{% url 'Edit_pelanggaran' nim_Pelanggaran=tb_pelanggaran.nim %}"><i class="menu-icon tf-icons bx bxs-edit" style="color: #ffcc00;"></i></a>
+                        <a href="{% url 'edit_pelanggaran' nim_pelanggaran=tb_pelanggaran.nim %}"><i class="menu-icon tf-icons bx bxs-edit" style="color: #ffcc00;"></i></a>
                         <i type="button" class="menu-icon tf-icons bx bxs-trash" data-bs-toggle="modal" data-bs-target="#hapus-{{ tb_pelanggaran.nim }}" style="color: #b30000;"></i>
                       </center>
                     </td>

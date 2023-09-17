@@ -10,6 +10,9 @@
       <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Pelanggaran /</span> Edit Pelanggaran Mahasiswa</h4>
 		<div class="card">
+			<div class="card-header py-3">
+			    <h6 class="m-0 font-weight-bold text-primary">Edit Data Pelanggaran</h6>
+			</div>
 		        <div class="card-body">
 					<div class="container">
 						<div class="row">
@@ -25,7 +28,7 @@
 		                 				</div>
 									{% endif %}
 								{% endfor %}
-								<form action="{% url 'Edit_pelanggaran' pelanggaran.nim %}" method="post">
+								<form method="post">
 							    {% csrf_token %}
 							    <div class="row mb-3">
 								    <div class="row mb-3">

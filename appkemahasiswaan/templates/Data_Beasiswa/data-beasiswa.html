@@ -13,28 +13,14 @@
           <div class="card">
           <div class="card-body">
           <div class="container">
-            <div class="row">
+            <div class="row mb-4">
               <div class="col-md-12">
-                <div class="row">
+                <div class="row mb-4">
                   <div class="col-md-8">
                      <h3>
-                      Data Kegiatan : 
+                      Tambah Data : 
                       <a href="/Tambah-Data-Beasiswa" class="btn btn-success btn-sm justify-content-end">Tambah +</a>
                     </h3>
-                  </div>
-                  <div class="col-sm">
-                    <!-- Membuat Form Pencarian -->
-                    <form action="" method="get" class="d-flex align-items-center g-3 mb-3">
-                      {% csrf_token %}
-                      <div class="col-sm input-group ">
-                        <input type="search" name="carinama" placeholder="Cari Nama Beasiswa" class="form-control">
-                        <button type="submit" class="btn btn-primary">
-                          <i class="fas fa-search fa-fw"></i>
-                        </button>
-                      </div>
-                    </form>
-                    <!-- End Pencarian -->
-
                   </div>
                 </div>
 
@@ -47,35 +33,30 @@
                        </div>
                     {% endif %}
                   {% endfor %}
-                <div class="text-nowrap">
-                <table class="table table-bordered">
-                  <thead class="text-center table-primary">
-                    <tr>
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr class="text-center">
+                    <th>No.</th>
                     <th>Nama</th>
                     <th>Dibuka</th>
                     <th>Ditutup</th>
                     <th>Logo Beasiswa</th>
-                    <th scope="col" style="width: 8rem;">Action</th>
                     <th>Detail</th>
                     </tr>
                   </thead>
                   <tbody>
                   {% for DataBeasiswa in data_beasiswa %}
                     <tr>
-                      <td>{{ DataBeasiswa.nama }}</td>
+                      <td class="text-center">{{ forloop.counter }}</td>
+                      <td >{{ DataBeasiswa.nama }}</td>
                       <td class="text-center">{{ DataBeasiswa.dibuka | date }}</td>
                       <td class="text-center">{{ DataBeasiswa.ditutup | date }}</td>
                       {% if DataBeasiswa.image %}
                         <td class="d-flex justify-content-center"><img src="{{ DataBeasiswa.image.url }}" width="40px" height="40px"/></td>
                       {% else %}
                         <td class="d-flex justify-content-center">No image available</td>
-                      {% endif %}             
-                      <td>
-                        <center>
-                          <a href="{% url 'Ubah_DataBeasiswa' DataBeasiswa.id %}"><i class="menu-icon tf-icons bx bxs-edit" style="color: #ffcc00;"></i></a> 
-                          <i type ="button" class="menu-icon tf-icons bx bxs-trash" data-bs-toggle="modal" data-bs-target="#hapus-{{ DataBeasiswa.id }}" style="color: #b30000;"></i>
-                        </center>
-                      </td>
+                      {% endif %}
+
                       <div class="modal" tabindex="-1" id="hapus-{{ DataBeasiswa.id }}">
                         <div class="modal-dialog">
                           <div class="modal-content">
@@ -86,12 +67,13 @@
                               apakah anda yakin ingin menghapus <strong>{{ DataBeasiswa.nama | upper }}</strong>
                             </div>
                             <div class="modal-footer">
-                              <a href="{% url 'Hapus_DataBeasiswa' DataBeasiswa.id %}" class="btn btn-danger">Hapus</a>
+                              <a href="" class="btn btn-danger">Hapus</a>
                               <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Batal</button>
                             </div>
                           </div>
                         </div>
                       </div>
+          
                       <td>
                         <center>
                           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detail-{{ DataBeasiswa.id }}">
@@ -152,7 +134,8 @@
                                   </div>
                                 </div>
                               <div class="modal-footer">
-                                <a href="{% url 'Ubah_DataBeasiswa' DataBeasiswa.id %}" type="button" class="btn btn-warning">Edit<i class="menu-icon tf-icons bx bxs-edit px-1"></i></a>
+                                <a href="/Edit-Data-Beasiswa/{{ DataBeasiswa.nama }}/" type="button" class="btn btn-warning">Edit<i class="menu-icon tf-icons bx bxs-edit px-1"></i></a>
+                                <a href="/hapus-Data-Beasiswa/{{ DataBeasiswa.nama }}/" type="button" class="btn btn-danger" data-x11bs-toggle="modal" data-bs-target="#hapus-{{ DataBeasiswa.id }}">Hapus<i class="menu-icon tf-icons bx bxs-trash px-1"></i></a>
                               </div>
                             </div>
                           </div>
@@ -162,7 +145,7 @@
 
                   {% empty %}
                     <tr>
-                      <td colspan="5" class="text-center">
+                      <td colspan="7" class="text-center">
                           <div class="misc-wrapper">
                             <h2 class="mb-2 mx-2">Data Not Found :(</h2>
                             <p class="mb-4 mx-2">Oops! 😖 The requested Data was not found on this server.</p>
@@ -182,8 +165,7 @@
                     </tr>
                   {% endfor %}
                   </tbody>
-                </table>      
-                </div>
+                </table> 
               </div>
 
               <!-- Page Halaman -->

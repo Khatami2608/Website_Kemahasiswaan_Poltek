@@ -8,6 +8,9 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
 <div class="container-xxl flex-grow-1 container-p-y">
   <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Kegiatan /</span> Edit Kegiatan Mahasiswa</h4>
   <div class="card">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Edit Artikel Politeknik Aceh</h6>
+    </div>
     <div class="card-body">
       <div class="container">
         <div class="row">
@@ -26,7 +29,7 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
 
             <form action="{% url 'edit_artikel' tb_artikel.id %}" method="post" enctype="multipart/form-data">
               {% csrf_token %}
-              <div class="row mb-3">
+               <div class="row mb-3">
                 <label class="col-sm-2 col-form-label" for="basic-default-name">Judul</label>
                 <div class="col-sm-10">
                   {{ form.judul }}
@@ -34,14 +37,14 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
               </div>
               <div class="row mb-3">
                 <label class="col-sm-2 col-form-label" for="basic-default-name">Kategori</label>
-                <div class="col-sm-10">
+                <div class="col-sm-8 mb-3">
                   {{ form.kategori }}
                 </div>
-              </div>
-              <div class="row mb-3">
-                <label class="col-sm-2 col-form-label" for="basic-default-name">Deskripsi</label>
-                <div class="col-sm">
-                  {{ form.Deskripsi }}
+                <div class="col-sm mb-3">
+                  <a class="btn btn-success" href="/tambah-kategori"><i class='bx bx-plus-medical'></i></a>
+                </div>
+                <div class="col-sm mb-3">
+                  <a class="btn btn-danger" href="/hapus-kategori"><i class='menu-icon tf-icons bx bxs-trash'></i></a>
                 </div>
               </div>
               <div class="row mb-3">
@@ -57,11 +60,23 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
                   <img id="image-preview" style="max-width: 300px; max-height: 200px;" />
                 </div>
               </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="basic-default-name">Deskripsi</label>
+                <div class="col-sm">
+                  {{ form.Deskripsi }}
+                </div>
+              </div>
+             <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="basic-default-name">Status</label>
+                <div class="col-sm-4">
+                 {{ form.status }} 
+               </div>
+             </div>
 
               <div class="row justify-content-end">
                 <div class="col-sm-10">
                   <button type="submit" class="btn btn-primary">Edit<i class='bx bxs-edit px-1'></i></button>
-                  <a href="/tabel-artikel" class="btn btn-danger">Kembali</a>
+                  <a href="/tabel-artikel" class="btn btn-success">Kembali</a>
                 </div>
               </div>
             </form>
@@ -86,5 +101,12 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
   // Add event listener to the file input
   var fileInput = document.querySelector('input[type="file"]');
   fileInput.addEventListener('change', previewImage);
+</script>
+<script src="https://cdn.ckeditor.com/4.21.0/full/ckeditor.js"></script>
+<script>
+    // Inisialisasi CKEditor pada textarea dengan id 'id_Deskripsi'
+    CKEDITOR.replace('id_Deskripsi', {
+        // Konfigurasi tambahan jika diperlukan
+    });
 </script>
 {% endblock %}

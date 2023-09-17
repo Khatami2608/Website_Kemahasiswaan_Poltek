@@ -1,30 +1,42 @@
 {% extends 'user_layout/base.html' %}
 
 {% block page_title %}
-Halaman Artikel - Kemahasiswaan Poltek Aceh
+  Halaman Organisasi - Kemahasiswaan Poltek Aceh
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Organisasi Kemahasiswaan</li>
-  </ol>
-</nav>
+  <main id="main" class="mb-4">
 
-  <h1>Organi Kemahasiswaan</h3>
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/home">Home</a></li>
+          <li>Organisasi Kemahasiswaan</li>
+        </ol>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Blog Single Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row">
+
+          <div class="col-lg entries">
+            <h1>Organisasi Kemahasiswaan</h3>
   <p>Berikut daftar organisasi yang terdaftar pada Politeknik Aceh tahun 2023</p>
   <hr>
   <table id="table_id" class="display table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="table_id_info">
-                <thead class="thead-light">
+                <thead class="thead-light text-center">
                   <tr role="row">
                     <th>No.</th>
                     <th>Image</th>
                     <th>Organisasi</th>
                     <th>visi</th>
                     <th>misi</th>
-                    <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -39,7 +51,6 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
                       <td>{{ tb_organisasi.organisasi }}</td>
                       <td>{{ tb_organisasi.visi }}</td>
                       <td>{{ tb_organisasi.misi }}</td>
-                      <td>{{ tb_organisasi.status }}</td>
                     </tr>
 
                   {% empty %}
@@ -65,5 +76,13 @@ Halaman Artikel - Kemahasiswaan Poltek Aceh
                   {% endfor %}
                   </tbody>
                 </table>
-</div>
+            
+          </div><!-- End blog entries list -->
+
+        </div>
+
+      </div>
+    </section><!-- End Blog Single Section -->
+
+  </main><!-- End #main -->
 {% endblock %}

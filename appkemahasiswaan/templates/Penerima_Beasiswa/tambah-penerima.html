@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block page_title %}
-Tambah Penerima Beasiswa - Kemahasiswaan Poltek Aceh
+  Tambah Penerima Beasiswa - Kemahasiswaan Poltek Aceh
 {% endblock %}
 
 {% block content %}
@@ -9,6 +9,9 @@ Tambah Penerima Beasiswa - Kemahasiswaan Poltek Aceh
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Penerima Beasiswa /</span> Tambah Penerima Beasiswa</h4>
 
     <div class="card">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Buat Data Diri</h6>
+        </div>
         <div class="card-body">
             <div class="container">
                 <div class="row">
@@ -27,49 +30,58 @@ Tambah Penerima Beasiswa - Kemahasiswaan Poltek Aceh
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         {% endif %}
-                        <form action="{% url 'Tambah_Penerima' %}" method="post" enctype="multipart/form-data">
+                        <form action="{% url 'tambah_penerima' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="row mb-3">
                                 <label class="col-sm-2" for="id_nim">NIM</label>
                                 <div class="col-sm-10">
-                                    {{ form.nim }}
+                                    {{ form_penerima.nim }}
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-2" for="id_nama">Nama</label>
                                 <div class="col-sm-10">
-                                    {{ form.nama }}
+                                    {{ form_penerima.nama }}
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-2" for="id_prodi">Prodi</label>
                                 <div class="col-sm-10">
-                                    {{ form.prodi }}
+                                    {{ form_penerima.prodi }}
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-2" for="id_prodi">Jenis Kelamin</label>
                                 <div class="col-sm-10">
-                                    {{ form.gender }}
+                                    {{ form_penerima.gender }}
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-2" for="id_angkatan">Angkatan</label>
                                 <div class="col-sm-10">
-                                    {{ form.angkatan }}
+                                    {{ form_penerima.angkatan }}
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <label class="col-sm-2" for="id_beasiswa">Nama Beasiswa</label>
-                                <div class="col-sm-10">
-                                    {{ form.beasiswa }}
-                                </div>
-                            </div>
+                            
                             <div class="row mb-3">
                                 <label class="col-sm-2" for="id_status">Status Mahasiswa</label>
                                 <div class="col-sm-10">
-                                    {{ form.status }}
+                                    {{ form_penerima.status }}
                                 </div>
+                            </div>
+                            <div class="row mb-3">
+                              <label class="col-sm-2 col-form-label" for="basic-default-name">Foto Diri</label>
+                              <div class="col-sm-10">
+                                <input type="file" name="foto" class="form-control" id="upload-image" accept="image/*" onchange="previewImage(event)"/>
+                                <label class="text-danger opacity-50">upload foto ukuran 3x4</label>
+                              </div>
+                            </div>
+
+                            <div class="row mb-3">
+                              <label class="col-sm-2 mb-3 col-form-label" for="basic-default-name">Image Preview</label>
+                              <div class="col-sm-10 mb-3">
+                                <img id="image-preview" style="max-width: 300px; max-height: 200px;" />
+                              </div>
                             </div>
                             <div class="row justify-content-end">
                                 <div class="col-sm-10">
@@ -84,4 +96,15 @@ Tambah Penerima Beasiswa - Kemahasiswaan Poltek Aceh
         </div>
     </div>
 </div>
+<script>
+  function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var imagePreview = document.getElementById('image-preview');
+      imagePreview.src = reader.result;
+    }
+    var selectedFile = event.target.files[0];
+    reader.readAsDataURL(selectedFile);
+  }
+</script>
 {% endblock %}

@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('appkemahasiswaan.urls')),
     path('', include('webbuser.urls')),
+    path('', include('login.urls')),
 ]
 
 if settings.DEBUG:

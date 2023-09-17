@@ -1,0 +1,72 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+Dashboard - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-3">Dashboard</h4>
+    <!-- start Card -->
+
+                <div class="card mb-3">
+                    <div class="d-flex align-items-end row">
+                      <div class="col-sm">
+                        <div class="card-body">
+                          <h5 class="card-title text-primary">Welcome {{ user }} 🎉</h5>
+                          <p class="mb-4">
+                            You have done <span class="fw-bold">72%</span> more sales today. Check your new badge in
+                            your profile.
+                          </p>
+
+                          <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
+                        </div>
+                      </div>
+                      <div class="col-sm-5 text-center text-sm-left">
+                        <div class="card-body pb-0 px-0 px-md-4">
+                          <img
+                            src="/static2/img/illustrations/man-with-laptop-light.png"
+                            height="140"
+                            alt="View Badge User"
+                            data-app-dark-img="illustrations/man-with-laptop-dark.png"
+                            data-app-light-img="illustrations/man-with-laptop-light.png"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-header m-0 me-2 pb-3">Aktivitas</h5>
+        <div class="container">
+            <table class="table" aria-describedby="table_id_info">
+              <tbody>
+                {% for Artikel in tb_artikel %}
+                <tr>
+                  <td class="text-center">{{ forloop.counter }}</td>
+                  {% if Artikel.image %}
+                  <td  class="d-flex justify-content-center"><img src="{{ Artikel.image.url }}" width="40px" height="40px"/></td>
+                  {% else %}
+                  <td class="d-flex justify-content-center">No image available</td>
+                  {% endif %}             
+                  <td>
+                  <h6 class="card-title"><b>{{ Artikel.judul }}</b></h6>
+                  <p class="card-text"><small class="text-muted">{{ Artikel.kategori }}</small></p>
+                  </td>
+                  <td>{{ Artikel.publikasi | date }}</td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- End Card -->
+</div>
+  
+{% endblock %}

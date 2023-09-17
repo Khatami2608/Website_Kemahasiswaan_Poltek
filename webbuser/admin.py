@@ -19,3 +19,5 @@ class PersonalInfoAdmin(admin.ModelAdmin):
 
 admin.site.register(PersonalInfo, PersonalInfoAdmin)
 
+admin.site.register(data_skpi)
+admin.site.register(organisasi)

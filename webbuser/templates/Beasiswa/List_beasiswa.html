@@ -1,0 +1,132 @@
+{% extends 'user_layout/base.html' %}
+
+{% block page_title %}
+  Halaman Organisasi - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+  <main id="main" class="mb-4">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/home">Home</a></li>
+          <li>Organisasi Kemahasiswaan</li>
+        </ol>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Blog Single Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row">
+
+          <div class="col-lg entries">
+            <h1>Beasiswa Politeknik Aceh</h3>
+  <p>Berikut daftar Beasiswa yang terdaftar pada Politeknik Aceh tahun 2023</p>
+  <hr>
+  <table class="display table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="table_id_info">
+                  <thead class="thead-light">
+                    <tr class="text-center">
+                    <th>No.</th>
+                    <th>Nama</th>
+                    <th>Dibuka</th>
+                    <th>Ditutup</th>
+                    <th>Logo Beasiswa</th>
+                    <th>Detail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for DataBeasiswa in data_beasiswa %}
+                    <tr>
+                      <td class="text-center">{{ forloop.counter }}</td>
+                      <td >{{ DataBeasiswa.nama }}</td>
+                      <td class="text-center">{{ DataBeasiswa.dibuka | date }}</td>
+                      <td class="text-center">{{ DataBeasiswa.ditutup | date }}</td>
+                      {% if DataBeasiswa.image %}
+                        <td class="d-flex justify-content-center"><img src="{{ DataBeasiswa.image.url }}" width="40px" height="40px"/></td>
+                      {% else %}
+                        <td class="d-flex justify-content-center">No image available</td>
+                      {% endif %}
+          
+                      <td>
+                        <center>
+                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detail-{{ DataBeasiswa.id }}">
+                            Detail
+                          </button>
+                        </center>
+                      </td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="detail-{{ DataBeasiswa.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Detail {{ DataBeasiswa.nama }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="col">
+                                    <h5>Logo {{ DataBeasiswa.nama }}</h5>
+                                    <img src="{{ DataBeasiswa.image.url }}" width="80px" height="80px"/>
+                                    <hr>
+                                    <h5>Deskripsi</h5>
+                                    <p>{{ DataBeasiswa.deskripsi|slice:": -1"  }}.</p>
+                                    <hr>
+                                    <h5>Persyaratan</h5>
+                                    <p>{{ DataBeasiswa.persyaratan }}.</p>
+                                    <hr>
+                                    <h5>Benefit</h5>
+                                    <p>{{ DataBeasiswa.benefit }}.</p>
+                                    <hr>
+                                    <h5>Status</h5>
+                                    <p>{{ DataBeasiswa.status }}.</p>
+                                    <hr>
+                                    <div class="row">
+                                      <div class="col">
+                                        <h5>dibuka</h5>
+                                        <p>{{ DataBeasiswa.dibuka }}.</p>
+                                        <hr>
+                                      </div>
+                                      <div class="col">
+                                        <h5>ditutup</h5>
+                                        <p>{{ DataBeasiswa.ditutup }}.</p>
+                                        <hr>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col">
+                                        <h5>IP Minimal</h5>
+                                        <p>{{ DataBeasiswa.ip_minimal }}.</p>
+                                        <hr>
+                                      </div>
+                                      <div class="col">
+                                        <h5>IPK Minimal</h5>
+                                        <p>{{ DataBeasiswa.ipk_minimal }}.</p>
+                                        <hr>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </tr>
+                  </tbody>
+                  {% endfor %}
+                </table> 
+
+          </div><!-- End blog entries list -->
+
+        </div>
+
+      </div>
+    </section><!-- End Blog Single Section -->
+
+  </main><!-- End #main -->
+{% endblock %}

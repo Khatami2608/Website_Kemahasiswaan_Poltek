@@ -10,6 +10,7 @@ class ArtikelAdmin(admin.ModelAdmin):
 		'publikasi',
 		'slug',
 		'update',
+		'status',
 	]
 admin.site.register(Artikel, ArtikelAdmin)
 admin.site.register(Category)
@@ -36,12 +37,19 @@ class DataBeasiswaAdmin(admin.ModelAdmin):
 
 admin.site.register(Data_Beasiswa, DataBeasiswaAdmin)
 
+class BeasiswaInline(admin.TabularInline):
+    model = Beasiswa
+    extra = 1
+
 class PenerimaBeasiswaAdmin(admin.ModelAdmin):
-	readonly_fields=[
-		'publikasi',
-	]
+    inlines = [BeasiswaInline]
+    list_display = ('nim', 'nama', 'angkatan', 'prodi', 'status', 'publikasi', 'gender')
+    list_filter = ('angkatan', 'prodi', 'gender', 'status')
+    search_fields = ('nim', 'nama')
+    list_per_page = 20
 
 admin.site.register(Penerima_Beasiswa, PenerimaBeasiswaAdmin)
+
 
 class Mahasiswa_MagangAdmin(admin.ModelAdmin):
 	readonly_fields=[
