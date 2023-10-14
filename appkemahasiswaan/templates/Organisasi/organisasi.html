@@ -121,58 +121,6 @@
                   </tbody>
                 </table>      
               </div>
-
-              <!-- Page Halaman -->
-              <div class="row">
-                <div class="col-md pt-5">
-                  <p class="me-3">
-                    Page {{ organisasi.number }} of {{ organisasi.paginator.num_pages }},
-                    Showing {{ organisasi.start_index }} to {{ organisasi.end_index }} of {{ organisasi.paginator.count }} entries
-                </p>
-                </div>
-                <div class="col-sm d-flex justify-content-end pt-5">
-                  {% if organisasi.has_other_pages %}
-                  <nav aria-label="Pagination">
-                      <ul class="pagination">
-
-                          {% if organisasi.has_previous %}
-                              <li class="page-item">
-                                  <a class="page-link" href="/organisasi?page={{ organisasi.previous_page_number }}">Previous</a>
-                              </li>
-                          {% else %}
-                              <li class="page-item disabled">
-                                  <a class="page-link">Previous</a>
-                              </li>
-                          {% endif %}
-
-                          {% for page in organisasi.paginator.page_range %}
-                              {% if organisasi.number == page %}
-                                  <li class="page-item active" aria-current="page">
-                                      <span class="page-link">{{ page }}</span>
-                                  </li>
-                              {% else %}
-                                  <li class="page-item">
-                                      <a class="page-link" href="/organisasi?page={{ page }}">{{ page }}</a>
-                                  </li>
-                              {% endif %}
-                          {% endfor %}
-
-                          {% if organisasi.has_next %}
-                              <li class="page-item">
-                                  <a class="page-link" href="/organisasi?page={{ organisasi.next_page_number }}">Next</a>
-                              </li>
-                          {% else %}
-                              <li class="page-item disabled">
-                                  <a class="page-link">Next</a>
-                              </li>
-                          {% endif %}
-
-                      </ul>
-                  </nav>
-              {% endif %}
-                </div>
-              </div>
-          <!-- End Page halaman -->
           </div>
           </div>
         </div>

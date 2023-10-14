@@ -151,3 +151,18 @@ class Form_Anggota_Organisasi(ModelForm):
             'foto': forms.ClearableFileInput({'class': 'form-control'}),
             'gender': forms.Select({'class': 'form-control'}),
         }
+
+class FormProdi(ModelForm):
+    class Meta:
+        model = Prodi
+        fields = '__all__'
+
+        widgets = {
+            'prodi': forms.TextInput({'class': 'form-control', 'placeholder': 'Nama Program Studi'}),
+            'ka_prodi': forms.TextInput({'class': 'form-control', 'placeholder': 'Nama Ketua Program Studi'}),
+            'nrp': forms.NumberInput({'class': 'form-control', 'placeholder': 'Nomor NRP'}),
+        }
+
+
+            
+        

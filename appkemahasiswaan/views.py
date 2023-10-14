@@ -391,7 +391,7 @@ def Penerima_BeasiswaView(request):
     if prodi:
         penerima = penerima.filter(prodi=prodi)
 
-    paginator = Paginator(penerima, 2)  # Menampilkan 2 item per halaman
+    paginator = Paginator(penerima, 10)  # Menampilkan 2 item per halaman
     page_number = request.GET.get('page')
     penerima = paginator.get_page(page_number)
 
@@ -524,7 +524,7 @@ def Mahasiswa_MagangView(request):
     if semester:
         magang = magang.filter(semester=semester)
 
-    paginator = Paginator(magang, 2) 
+    paginator = Paginator(magang, 10) 
     page_number = request.GET.get('page')
     magang = paginator.get_page(page_number)
 
@@ -571,7 +571,7 @@ def OrganisasiView(request):
     if cari:
         organisasi = organisasi.filter(organisasi__icontains=cari)
 
-    paginator = Paginator(organisasi, 2) 
+    paginator = Paginator(organisasi, 10) 
     page_number = request.GET.get('page')
     organisasi = paginator.get_page(page_number)
 
@@ -727,3 +727,64 @@ def UserView(request):
         'userview': userview,
     }
     return render(request, 'User/data_user.html', konteks)
+
+def Tambah_Prodi(request):
+    form = FormProdi()
+    pesan = ""
+
+    if request.POST:
+        form = FormProdi(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            form = FormProdi()
+            pesan = "Data Berhasil Disimpan"
+
+            konteks = {
+                'form': form,
+                'pesan': pesan,
+            }
+            return render(request, 'Prodi/tambah_prodi.html', konteks)
+        else:
+            pesan2 = "Lengkapi data yang ada"
+
+            konteks = {
+                'form': form,
+                'pesan2': pesan2,
+            }
+    konteks = {
+        'form': form,
+        'pesan': pesan,
+    }   
+    return render(request, 'Prodi/tambah_prodi.html', konteks)
+
+def ProdiViews(request):
+    prodi = Prodi.objects.all()
+
+    konteks = {
+        'prodi': prodi,
+    }
+    return render(request, 'Prodi/tabel_prodi.html', konteks)
+
+def Edit_Prodi(request, id_Prodi):
+    prodi = Prodi.objects.get(id=id_Prodi)
+    template = 'Prodi/edit_prodi.html'
+    if request.method == 'POST':
+        form = FormProdi(request.POST, request.FILES, instance=prodi)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Data Berhasil Diperbaharui!')
+            return redirect('Edit_Prodi', id_Prodi=id_Prodi)
+    else:
+        form = FormProdi(instance=prodi)
+    konteks = {
+        'form': form,
+        'prodi': prodi,
+    }
+    return render(request, template, konteks)
+
+def Hapus_Prodi(request, id_Prodi):
+    prodi = Prodi.objects.filter(id=id_Prodi)
+    prodi.delete()
+
+    messages.success(request, 'Data Berhasil Dihapus!')
+    return redirect('/tabel-prodi/')

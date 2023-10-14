@@ -28,7 +28,6 @@ class PendidikanForm(forms.ModelForm):
         fields = '__all__'
 
         widgets = {
-            'personal_info': forms.TextInput({'class': 'form-control', 'value': '{{ personal_info.first_name }} {{ personal_info.last_name }}'}),
             'nama_pendidikan': forms.TextInput({'class': 'form-control', 'placeholder': 'Sekolah / Institusi / Universitas'}),
             'masuk': forms.TextInput({'class': 'form-control', 'placeholder': 'tahun masuk', 'type':'number'}),
             'tamat': forms.TextInput({'class': 'form-control', 'placeholder': 'tahun keluar', 'type':'number'}),

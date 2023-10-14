@@ -48,7 +48,7 @@ def ArtikelList(request):
     if cari_tgl:
         tb_artikel = tb_artikel.filter(publikasi__date=cari_tgl)
 
-    paginator = Paginator(tb_artikel, 2)
+    paginator = Paginator(tb_artikel, 4)
     page_number = request.GET.get('page')
     tb_artikel_page = paginator.get_page(page_number)
 
@@ -89,7 +89,7 @@ def ListBeasiswa(request):
     
     data_beasiswa = Data_Beasiswa.objects.all().order_by(ordering)
 
-    paginator = Paginator(data_beasiswa, 2)  # Menampilkan 2 item per halaman
+    paginator = Paginator(data_beasiswa, 10)  # Menampilkan 2 item per halaman
     page_number = request.GET.get('page')
     data_beasiswa = paginator.get_page(page_number)
 

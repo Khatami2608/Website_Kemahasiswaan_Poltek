@@ -41,7 +41,7 @@ def user_register(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'Data berhasil disimpan.')
-                return redirect('dashboard')
+                return redirect('login')
         else:
             messages.error(request, 'Periksa Kembali !!.')
     else:
@@ -50,7 +50,7 @@ def user_register(request):
 
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def dashboard(request):
     ordering = '-publikasi'
     tb_artikel = Artikel.objects.all().order_by(ordering)

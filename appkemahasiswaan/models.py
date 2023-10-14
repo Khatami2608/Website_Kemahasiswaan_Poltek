@@ -50,8 +50,8 @@ class Artikel(models.Model):
 
 class Prodi(models.Model):
     prodi = models.CharField(max_length=100)
-    ka_prodi = models.CharField(max_length=100, default='default_value')
-    nrp = models.IntegerField(default=0)
+    ka_prodi = models.CharField(max_length=100)
+    nrp = models.IntegerField()
 
     def __str__(self):
         return self.prodi

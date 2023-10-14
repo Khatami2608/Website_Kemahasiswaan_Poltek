@@ -55,5 +55,10 @@ urlpatterns = [
     # User 
     path('tambah-user/', tambah_user, name='tambah_user'),
     path('tabel-user/', UserView, name='tabel_user'),
+    # Prodi
+    path('tambah-prodi/', Tambah_Prodi, name='tambah_prodi'),
+    path('tabel-prodi/', ProdiViews, name='tabel_prodi'),
+    path('edit-prodi/<int:id_Prodi>/', Edit_Prodi, name='Edit_Prodi'),
+    path('hapus-prodi/<int:id_Prodi>/', Hapus_Prodi, name='Hapus_Prodi'),
 ]
   

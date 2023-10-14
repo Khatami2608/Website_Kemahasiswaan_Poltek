@@ -1,0 +1,90 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+Halaman Prodi - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Prodi /</span> Program Studi
+  </h4>
+  <div class="card">
+    <div class="card-body">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row mb-4">
+              <!-- Tambah data -->
+              <div class="col-md-5">
+                <h3>
+                  Tambah Data :
+                  <a href="/tambah-prodi" class="btn btn-success btn-sm justify-content-end">Tambah +</a>
+                </h3>
+              </div>
+            </div>
+            </div>
+
+            {% for message in messages %}
+            {% if messages %}
+            <div class="alert alert-success alert-dismissible" role="alert">
+              <i class='bx bxs-check-square'></i>
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            <!-- Start Tabel -->
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr role="row" class="text-center">
+                  <th>No</th>
+                  <th>Prodi</th>
+                  <th>Ketua Prodi</th>
+                  <th>NRP</th>
+                  <th scope="col" style="width: 8rem;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for tb_prodi in prodi %}
+                <tr>
+                  <td class="text-center">{{ forloop.counter }}</td>
+                  <td>{{ tb_prodi.prodi }}</td>
+                  <td>{{ tb_prodi.ka_prodi }}</td>
+                  <td class="text-center">{{ tb_prodi.nrp }}</td>
+                  <td>
+                    <center>
+                      <a href="{% url 'Edit_Prodi' tb_prodi.id %}" class="btn btn-warning"><i class="menu-icon tf-icons bx bxs-edit"></i></a>
+                      <i type ="button" class="menu-icon tf-icons bx bxs-trash btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus-{{ tb_prodi.id }}"></i>
+                    </center>
+                  </td>
+                  <div class="modal" tabindex="-1" id="hapus-{{ tb_prodi.id }}">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title"></h5>
+                        </div>
+                        <div class="modal-body">
+                          apakah anda yakin ingin menghapus Prodi<br>
+                          <strong>{{ tb_prodi.prodi | upper }}</strong>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="{% url 'Hapus_Prodi' tb_prodi.id %}" class="btn btn-danger">Hapus</a>
+                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Batal</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <!-- End tabel -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
