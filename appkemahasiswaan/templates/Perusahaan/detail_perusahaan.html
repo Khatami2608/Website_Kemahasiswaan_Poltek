@@ -1,0 +1,64 @@
+{% extends 'layouts/base.html' %}
+
+{% block page_title %}
+Halaman Perusahaan - Kemahasiswaan Poltek Aceh
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Perusahaan /</span> Detail Perusahaan
+  </h4>
+  <div class="card">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Detail Data Perusahaan PPI</h6>
+    </div>
+    <div class="card-body">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row mb-4">
+              <!-- Tambah data -->
+              <div class="col">
+                <h2>
+                  <b>
+                    <label class="col mb-4" for="basic-default-name">{{ detail_psh.nama_psh }}</label>
+                  </b>   
+                </h2>
+                  <label class="col mb-3" for="basic-default-name">
+                    <i class="bx bxs-map"></i>
+                    <span>
+                      {{ detail_psh.alamat }}
+                    </span>
+                  </label>
+                  <label class="col mb-3" for="basic-default-name">
+                    <i class="bx bxs-envelope"></i>
+                    <span>
+                      {{ detail_psh.email }}
+                    </span>
+                  </label>
+                  <label class="col mb-3" for="basic-default-name">
+                    <i class="bx bxs-phone"></i>
+                    <span>
+                      {{ detail_psh.kontak }}
+                    </span>
+                  </label>
+                  <p class="col">
+                    <h4 class="mb-3"><b>Deskripsi Perusahaan</b><hr></h4>
+                    {{ detail_psh.deskripsi|safe }}
+                  </p>
+
+                  <div class="col-sm d-flex justify-content-end pt-5">
+                    <a href="/tabel-perusahaan" class="btn btn-success">Kembali</a>
+                  </div>
+              </div>
+            </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

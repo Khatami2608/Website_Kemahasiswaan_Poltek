@@ -132,6 +132,17 @@ class Beasiswa(models.Model):
     def __str__(self):
         return str(self.id_beasiswa)
 
+class Perusahaan_PPI(models.Model):
+	id_perusahaan = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	nama_psh = models.CharField(max_length=100)
+	alamat = models.CharField(max_length=150)
+	email = models.EmailField()
+	kontak = models.CharField(max_length=20)
+	deskripsi = RichTextField(blank=True, null=True)
+
+	def __str__(self):
+		return str(self.nama_psh)
+
 class Mahasiswa_Magang(models.Model):
     nim = models.IntegerField(primary_key=True)
     nama = models.CharField(max_length=200)
@@ -139,8 +150,8 @@ class Mahasiswa_Magang(models.Model):
     angkatan = models.IntegerField()
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES)
     jalur_masuk = models.CharField(max_length=100)
+    perusahaan = models.ForeignKey(Perusahaan_PPI, on_delete=models.CASCADE, default=True)
     tgl_magang = models.DateField()
-    perusahaan = models.CharField(max_length=300)
     pembimbing = models.CharField(max_length=200)
     semester = models.CharField(max_length=20, choices=SEMESTER_CHOICES)
     publikasi = models.DateTimeField(auto_now_add=True)
@@ -179,3 +190,6 @@ class Anggota_Organisasi(models.Model):
 
     def __str__(self):
         return str(self.nim)
+
+
+

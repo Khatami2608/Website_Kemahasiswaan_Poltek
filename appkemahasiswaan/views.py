@@ -788,3 +788,72 @@ def Hapus_Prodi(request, id_Prodi):
 
     messages.success(request, 'Data Berhasil Dihapus!')
     return redirect('/tabel-prodi/')
+
+def Tambah_Perusahaan(request):
+    form = FormPerusahaan()
+    pesan = ""
+
+    if request.POST:
+        form = FormPerusahaan(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            form = FormPerusahaan()
+            pesan = "Data Berhasil Disimpan"
+
+            konteks = {
+                'form': form,
+                'pesan': pesan,
+            }
+            return render(request, 'Perusahaan/tambah_perusahaan.html', konteks)
+        else:
+            pesan2 = "Lengkapi data yang ada"
+
+            konteks = {
+                'form': form,
+                'pesan2': pesan2,
+            }
+    konteks = {
+        'form': form,
+        'pesan': pesan,
+    }   
+    return render(request, 'Perusahaan/tambah_perusahaan.html', konteks)
+
+def PerusahaanViews(request):
+    perusahaan = Perusahaan_PPI.objects.all()
+
+    konteks = {
+        'perusahaan': perusahaan,
+    }
+    return render(request, 'Perusahaan/tabel_perusahaan.html', konteks)
+
+def Edit_Perusahaan(request, id_perusahaan_Perusahaan_PPI):
+    perusahaan = Perusahaan_PPI.objects.get(id_perusahaan=id_perusahaan_Perusahaan_PPI)
+    template = 'Perusahaan/edit_perusahaan.html'
+    if request.method == 'POST':
+        form = FormPerusahaan(request.POST, request.FILES, instance=perusahaan)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Data Berhasil Diperbaharui!')
+            return redirect('Edit_psh', id_perusahaan_Perusahaan_PPI=id_perusahaan_Perusahaan_PPI)
+    else:
+        form = FormPerusahaan(instance=perusahaan)
+    konteks = {
+        'form': form,
+        'perusahaan': perusahaan,
+    }
+    return render(request, template, konteks)
+
+def Hapus_Perusahaan(request, id_perusahaan_Perusahaan_PPI):
+    perusahaan = Perusahaan_PPI.objects.filter(id_perusahaan=id_perusahaan_Perusahaan_PPI)
+    perusahaan.delete()
+
+    messages.success(request, 'Data Berhasil Dihapus!')
+    return redirect('/tabel-perusahaan/')\
+    
+def Detail_Perusahaan(request, id_perusahaan_Perusahaan_PPI):
+    detail_psh = Perusahaan_PPI.objects.get(id_perusahaan=id_perusahaan_Perusahaan_PPI)
+
+    konteks = {
+        'detail_psh': detail_psh,
+    }
+    return render(request, 'Perusahaan/detail_perusahaan.html', konteks)

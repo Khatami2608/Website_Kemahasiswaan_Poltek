@@ -117,7 +117,7 @@ class FormMahasiswa_Magang(ModelForm):
             'angkatan': forms.NumberInput({'class': 'form-control', 'placeholder': 'Masukkan Angkatan'}),
             'jalur_masuk': forms.TextInput({'class': 'form-control', 'placeholder': 'Masukkan Jalur Masuk'}),
             'tgl_magang': forms.DateInput({'class': 'form-control', 'type': 'date'}),
-            'perusahaan': forms.TextInput({'class': 'form-control', 'placeholder': 'Masukkan Nama Perusahaan'}),
+            'perusahaan': forms.Select({'class': 'form-control'}),
             'pembimbing': forms.TextInput({'class': 'form-control', 'placeholder': 'Masukkan Nama Pembimbing Title & Gelar'}),
             'semester': forms.Select({'class': 'form-control'}),
             'gender': forms.Select({'class': 'form-control'}),
@@ -161,8 +161,18 @@ class FormProdi(ModelForm):
             'prodi': forms.TextInput({'class': 'form-control', 'placeholder': 'Nama Program Studi'}),
             'ka_prodi': forms.TextInput({'class': 'form-control', 'placeholder': 'Nama Ketua Program Studi'}),
             'nrp': forms.NumberInput({'class': 'form-control', 'placeholder': 'Nomor NRP'}),
+        } 
+
+class FormPerusahaan(ModelForm):
+    deskripsi = forms.CharField(widget=CKEditorWidget())
+
+    class Meta:
+        model = Perusahaan_PPI
+        fields = '__all__'
+
+        widgets = {
+            'nama_psh' : forms.TextInput({'class': 'form-control', 'placeholder': 'Nama Perusahaan'}),
+            'alamat' : forms.TextInput({'class': 'form-control', 'placeholder': 'Alamat Perusahaan'}),
+            'email' : forms.TextInput({'class': 'form-control', 'placeholder': 'email@gmail.com', 'type':'email'}),
+            'kontak' : forms.TextInput({'class': 'form-control', 'placeholder': 'Kontak Perusahaan', 'type':'number'}),
         }
-
-
-            
-        

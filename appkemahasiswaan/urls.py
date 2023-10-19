@@ -60,5 +60,11 @@ urlpatterns = [
     path('tabel-prodi/', ProdiViews, name='tabel_prodi'),
     path('edit-prodi/<int:id_Prodi>/', Edit_Prodi, name='Edit_Prodi'),
     path('hapus-prodi/<int:id_Prodi>/', Hapus_Prodi, name='Hapus_Prodi'),
+    # Perusahaan
+    path('tambah-perusahaan/', Tambah_Perusahaan, name='tambah_psh'),
+    path('tabel-perusahaan/', PerusahaanViews, name='tabel_psh'),
+    path('edit-perusahaan/<uuid:id_perusahaan_Perusahaan_PPI>/', Edit_Perusahaan, name='Edit_psh'),
+    path('hapus-perusahaan/<uuid:id_perusahaan_Perusahaan_PPI>/', Hapus_Perusahaan, name='Hapus_psh'),
+    path('detail-perusahaan/<uuid:id_perusahaan_Perusahaan_PPI>/', Detail_Perusahaan, name='Detail_psh'),
 ]
   
